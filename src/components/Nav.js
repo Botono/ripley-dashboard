@@ -4,22 +4,22 @@ import React, { Component } from 'react';
 class Nav extends Component {
     render() {
         return (
-            <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
+            <div className="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div className="container-fluid">
+                    <div className="navbar-header">
+                        <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span className="sr-only">Toggle navigation</span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="../">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        <a className="navbar-brand" href="../">
+                            <span className="glyphicon glyphicon-chevron-left"></span>
                         </a>
-                        <a class="navbar-brand" href="./">Ripley's Dashboard</a>
+                        <a className="navbar-brand" href="./">Ripley's Dashboard</a>
                     </div>
-                    {/* <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav navbar-left">
+                    {/* <div className="navbar-collapse collapse">
+                        <ul className="nav navbar-nav navbar-left">
                             <li><a href="https://keen.io">Home</a></li>
                             <li><a href="https://keen.io/team">Team</a></li>
                             <li><a href="https://github.com/keenlabs/dashboards/tree/gh-pages/layouts/hero-thirds">Source</a></li>

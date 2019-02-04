@@ -1,20 +1,39 @@
 import React, { Component } from 'react';
+import { isEmpty, keys } from 'lodash';
+
 
 import Nav from './components/Nav';
+import WaterSummaryChart from './components/Water/WaterSummaryChart';
 
+import Config from './common/config';
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      water_data: {},
+    };
+  }
+
   componentDidMount() {
-    fetch('https://0fjc71o959.execute-api.us-west-1.amazonaws.com/v1/fitbark/activity?startDate=2019-01-22&endDate=2019-01-23&resolution=daily', {
-      mode: "cors",
-    })
+
+  }
+
+  getWaterData = () => {
+    let that = this;
+
+    fetch(Config.api_url + '/water')
       .then(function (response) {
         return response.json();
       })
       .then(function (myJson) {
-        console.log(JSON.stringify(myJson));
+        that.setState({
+          water_data: myJson,
+        });
       });
   }
+
+
   render() {
     return (
       <div>
@@ -36,7 +55,7 @@ class App extends Component {
             </div>
             <div class="col-sm-9">
               <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                   <div class="chart-wrapper">
                     <div class="chart-title">
                       Activity
@@ -49,20 +68,11 @@ class App extends Component {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="chart-wrapper">
-                    <div class="chart-title">
-                      Water
-                    </div>
-                    <div class="chart-stage">
-                      <img data-src="holder.js/100%x240/white" />
-                    </div>
-                    <div class="chart-notes">
-                      Notes about this chart
-                    </div>
-                  </div>
+                <div class="col-sm-6">
+                  <WaterSummaryChart
+                    getWaterData={this.getWaterData}
+                    water_data={this.state.water_data}
+                  />
                 </div>
               </div>
             </div>
