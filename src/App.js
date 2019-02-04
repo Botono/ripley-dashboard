@@ -3,6 +3,18 @@ import React, { Component } from 'react';
 import Nav from './components/Nav';
 
 class App extends Component {
+
+  componentDidMount() {
+    fetch('https://0fjc71o959.execute-api.us-west-1.amazonaws.com/v1/fitbark/activity?startDate=2019-01-22&endDate=2019-01-23&resolution=daily', {
+      mode: "cors",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (myJson) {
+        console.log(JSON.stringify(myJson));
+      });
+  }
   render() {
     return (
       <div>
