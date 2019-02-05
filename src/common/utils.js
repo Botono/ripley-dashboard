@@ -1,16 +1,12 @@
 import Config from './config';
 
 export const fetchData = (url, method, body) => {
-    let result;
-
-    fetch(Config.api_url + url)
+    return fetch(Config.api_url + url, {
+        headers: {
+            "x-api-key": window.localStorage.getItem('api-key'),
+        },
+    })
         .then(function (response) {
             return response.json();
-        })
-        .then(function (myJson) {
-            result = myJson;
         });
-
-    return result;
-
 }

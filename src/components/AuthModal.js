@@ -24,7 +24,10 @@ class AuthModal extends Component {
 
     render() {
         return(
-            <Modal.Dialog show={this.props.show}>
+            <Modal
+                show={this.props.showModal}
+                centered
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>API Key</Modal.Title>
                 </Modal.Header>
@@ -47,7 +50,7 @@ class AuthModal extends Component {
                 <Modal.Footer>
                     <Button variant="primary" onClick={this.saveApiKey}>Save</Button>
                 </Modal.Footer>
-            </Modal.Dialog>
+            </Modal>
         );
 
     }

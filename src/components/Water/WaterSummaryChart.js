@@ -14,10 +14,6 @@ class WaterSummaryChart extends Component {
         };
     }
 
-    componentDidMount() {
-        this.props.getWaterData();
-    }
-
     componentDidUpdate(prevProps) {
         if (isEmpty(prevProps) || keys(prevProps.water_data).length !== keys(this.props.water_data).length ) {
             this.setState(
@@ -59,11 +55,11 @@ class WaterSummaryChart extends Component {
 
     render() {
         return (
-            <div class="chart-wrapper">
-                <div class="chart-title">
+            <div className="chart-wrapper">
+                <div className="chart-title">
                     Water Consumed: Last {this.state.days_to_show} Days
                 </div>
-                <div class="chart-stage">
+                <div className="chart-stage">
                     <Line
                         data={this.state.water_chart_data}
                         options={{
@@ -78,7 +74,7 @@ class WaterSummaryChart extends Component {
                         }}
                     />
                 </div>
-                <div class="chart-notes">
+                <div className="chart-notes">
                     Notes about this chart
                     </div>
             </div>
