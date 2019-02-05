@@ -3,34 +3,45 @@ import { isEmpty, keys } from 'lodash';
 
 
 import Nav from './components/Nav';
+import AuthModal from './components/AuthModal';
 import WaterSummaryChart from './components/Water/WaterSummaryChart';
 
 import Config from './common/config';
+import { fetchData } from './common/utils'
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      show_auth_modal: false,
       water_data: {},
     };
   }
 
   componentDidMount() {
+    this.checkApiKey();
+  }
 
+  checkApiKey = () => {
+    if (window.localStorage.getItem('api-key') === '') {
+      this.setState({
+        show_auth_modal: true,
+      });
+    }
+  }
+
+  setApiKey = (value) => {
+    debugger;
+    window.localStorage.setItem('api-key', value);
+    this.checkApiKey();
   }
 
   getWaterData = () => {
-    let that = this;
+    let theData = fetchData('/water');
 
-    fetch(Config.api_url + '/water')
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (myJson) {
-        that.setState({
-          water_data: myJson,
-        });
-      });
+    this.setState({
+      water_data: theData,
+    });
   }
 
 
@@ -38,6 +49,9 @@ class App extends Component {
     return (
       <div>
         <Nav />
+
+        <AuthModal show={this.state.show_auth_modal} setApiKey={this.setApiKey} />
+
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-3">
