@@ -16,3 +16,8 @@ code {
 .rootContainer {
   padding-top: 40px;
 }
+
+.changelog-table {
+  overflow-y: scroll;
+  max-height: 650px;
+}

@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Nav from './components/Nav';
 import AuthModal from './components/AuthModal';
+import ChangelogTable from './components/Changelog/ChangelogTable'
 import WaterSummaryChart from './components/Water/WaterSummaryChart';
 
 import Config from './common/config';
@@ -39,6 +40,7 @@ class App extends Component {
   initializeData = () => {
     if (!this.apiKeyMissing()) {
       this.getWaterData();
+      this.getChangelogData();
     }
   }
 
@@ -52,6 +54,16 @@ class App extends Component {
     });
   }
 
+  getChangelogData = () => {
+    let that = this;
+    fetchData('/changelog')
+      .then(function (json_data) {
+        that.setState({
+          changelog_data: json_data,
+        });
+      });
+  }
+
 
   render() {
     return (
@@ -63,17 +75,7 @@ class App extends Component {
 
           <Row>
             <Col sm={3}>
-              <div className="chart-wrapper">
-                <div className="chart-title">
-                  Side Bar Title
-                </div>
-                <div className="chart-stage">
-                  <img data-src="holder.js/100%x650/white" />
-                </div>
-                <div className="chart-notes">
-                  Notes about this chart
-                </div>
-              </div>
+              <ChangelogTable changelog_data={this.state.changelog_data} />
             </Col>
             <Col sm={9}>
               <Row>
