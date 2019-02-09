@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { isEmpty, keys, takeRight } from 'lodash';
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
 
 
 
@@ -12,18 +13,18 @@ class ChangelogTable extends Component {
         super(props);
 
         this.state = {
-            table_data: [],
+            filtered_data: [],
+            raw_data: [],
             days_to_show: 10,
+            data_filter: '',
         };
     }
 
     componentDidUpdate(prevProps) {
         if (isEmpty(prevProps) || prevProps.changelog_data.length !== this.props.changelog_data.length) {
-            this.setState(
-                {
-                    table_data: this.formatChangelogData(this.props.changelog_data)
-                }
-            );
+            this.setState({
+                    raw_data: this.props.changelog_data
+                }, this.formatChangelogData);
         }
     }
 
@@ -35,9 +36,23 @@ class ChangelogTable extends Component {
         return 0;
     }
 
-    formatChangelogData = (changelog_data) => {
-        changelog_data.sort(this.sortFunc)
-        return changelog_data;
+    formatChangelogData = () => {
+        let { raw_data } = this.state;
+        let filtered_data = [];
+
+        if (this.state.data_filter === '') {
+            filtered_data = raw_data;
+        } else {
+            filtered_data = raw_data.filter(item => item[2].toLowerCase().includes(this.state.data_filter.toLowerCase()), this)
+        }
+
+        filtered_data.sort(this.sortFunc)
+
+        this.setState(
+            {
+                filtered_data: filtered_data
+            }
+        );
     }
 
     getTableRows = () => {
@@ -46,7 +61,7 @@ class ChangelogTable extends Component {
             Medicine: 'prescription',
             Other: 'question',
         };
-        return this.state.table_data.map((row, idx) => {
+        return this.state.filtered_data.map((row, idx) => {
             let classes = `fas fa-${msgTypeIconMap[row[1]]}`;
 
             return (
@@ -63,14 +78,24 @@ class ChangelogTable extends Component {
         });
     }
 
+    handleFilterChange = (e) => {
+        this.setState({
+            data_filter: e.target.value,
+        }, this.formatChangelogData);
+    }
+
     render() {
         return (
-            <div className="chart-wrapper changelog-table">
+            <div className="chart-wrapper ">
                 <div className="chart-title">
                     Changelog
                 </div>
-                <div className="chart-stage">
-
+                <div className="changelog-table">
+                    <Form.Control
+                        size="sm"
+                        type="text"
+                        placeholder="Filter"
+                        onChange={this.handleFilterChange} />
                     {this.getTableRows()}
 
                 </div>
