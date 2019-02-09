@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { isEmpty, keys, takeRight } from 'lodash';
 import Table from 'react-bootstrap/Table';
+import Card from 'react-bootstrap/Card';
 
 
 
@@ -17,7 +18,7 @@ class ChangelogTable extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (isEmpty(prevProps) || keys(prevProps.changelog_data).length !== keys(this.props.changelog_data).length) {
+        if (isEmpty(prevProps) || prevProps.changelog_data.length !== this.props.changelog_data.length) {
             this.setState(
                 {
                     table_data: this.formatChangelogData(this.props.changelog_data)
@@ -40,13 +41,24 @@ class ChangelogTable extends Component {
     }
 
     getTableRows = () => {
-        return this.state.table_data.map(row => {
+        const msgTypeIconMap = {
+            Diet: 'utensils',
+            Medicine: 'prescription',
+            Other: 'question',
+        };
+        return this.state.table_data.map((row, idx) => {
+            let classes = `fas fa-${msgTypeIconMap[row[1]]}`;
+
             return (
-                <tr>
-                    <td>{row[0]}</td>
-                    <td>{row[1]}</td>
-                    <td>{row[2]}</td>
-                </tr>
+                <Card key={idx}>
+                    <Card.Header>
+                        <i className={classes}></i>&nbsp;
+                        {row[0]}
+                    </Card.Header>
+                    <Card.Body>
+                        {row[2]}
+                    </Card.Body>
+                </Card>
             )
         });
     }
@@ -58,18 +70,9 @@ class ChangelogTable extends Component {
                     Changelog
                 </div>
                 <div className="chart-stage">
-                    <Table striped bordered hover size="sm">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Change</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.getTableRows()}
-                        </tbody>
-                    </Table>
+
+                    {this.getTableRows()}
+
                 </div>
             </div>
         );

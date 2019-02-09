@@ -21,3 +21,7 @@ code {
   overflow-y: scroll;
   max-height: 650px;
 }
+
+.nav {
+  background-color: #614032;
+}

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { isNull, keys } from 'lodash';
 import { Container, Row, Col } from 'react-bootstrap';
+import moment from 'moment';
 
 
-import Nav from './components/Nav';
+import Nav from './components/Nav/Nav';
 import AuthModal from './components/AuthModal';
 import ChangelogTable from './components/Changelog/ChangelogTable'
 import WaterSummaryChart from './components/Water/WaterSummaryChart';
+import ActivitySummaryChart from './components/Activity/ActivitySummaryChart';
+
 
 import Config from './common/config';
 import { fetchData } from './common/utils'
@@ -17,6 +20,9 @@ class App extends Component {
     this.state = {
       show_auth_modal: false,
       water_data: {},
+      water_data_loading: true,
+      changelog_data: [],
+      activity_data: {},
     };
   }
 
@@ -41,6 +47,7 @@ class App extends Component {
     if (!this.apiKeyMissing()) {
       this.getWaterData();
       this.getChangelogData();
+      this.getActivityData();
     }
   }
 
@@ -50,6 +57,7 @@ class App extends Component {
       .then(function (json_data) {
         that.setState({
           water_data: json_data,
+          water_data_loading: false,
         });
     });
   }
@@ -60,6 +68,22 @@ class App extends Component {
       .then(function (json_data) {
         that.setState({
           changelog_data: json_data,
+        });
+      });
+  }
+
+  getActivityData = () => {
+    let that = this,
+        params = {
+          startDate: moment().subtract(10, 'd').format('YYYY-MM-DD'),
+          endDate: moment().format('YYYY-MM-DD'),
+          resolution: 'daily',
+        };
+
+    fetchData('/fitbark/activity', 'GET', params)
+      .then(function (json_data) {
+        that.setState({
+          activity_data: json_data,
         });
       });
   }
@@ -80,22 +104,13 @@ class App extends Component {
             <Col sm={9}>
               <Row>
                 <Col sm={6}>
-                  <div className="chart-wrapper">
-                    <div className="chart-title">
-                      Activity
-                    </div>
-                    <div className="chart-stage">
-                      <img data-src="holder.js/100%x240/white" />
-                    </div>
-                    <div className="chart-notes">
-                      Notes about this chart
-                    </div>
-                  </div>
+                  <ActivitySummaryChart chart_data={this.state.activity_data} />
                 </Col>
                 <Col sm={6}>
                   <WaterSummaryChart
                     getWaterData={this.getWaterData}
                     water_data={this.state.water_data}
+                    loading={this.state.water_data_loading}
                   />
                 </Col>
               </Row>
