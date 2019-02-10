@@ -43,10 +43,10 @@ class ChangelogTable extends Component {
         if (this.state.data_filter === '') {
             filtered_data = raw_data;
         } else {
-            filtered_data = raw_data.filter(item => item[2].toLowerCase().includes(this.state.data_filter.toLowerCase()), this)
+            filtered_data = raw_data.filter(item => item.message.toLowerCase().includes(this.state.data_filter.toLowerCase()), this)
         }
 
-        filtered_data.sort(this.sortFunc)
+        // filtered_data.sort(this.sortFunc)
 
         this.setState(
             {
@@ -62,16 +62,16 @@ class ChangelogTable extends Component {
             Other: 'question',
         };
         return this.state.filtered_data.map((row, idx) => {
-            let classes = `fas fa-${msgTypeIconMap[row[1]]}`;
+            let classes = `fas fa-${msgTypeIconMap[row.type]}`;
 
             return (
                 <Card key={idx}>
                     <Card.Header>
                         <i className={classes}></i>&nbsp;
-                        {row[0]}
+                        {row.date}
                     </Card.Header>
                     <Card.Body>
-                        {row[2]}
+                        {row.message}
                     </Card.Body>
                 </Card>
             )
