@@ -23,5 +23,16 @@ code {
 }
 
 .nav {
-  background-color: #614032;
+  background-color: #313a60;
 }
+
+.nav a {
+  color: white;
+  padding-right: 10px;
+}
+
+.nav a.is-active {
+  text-decoration: underline;
+}
+
+

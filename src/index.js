@@ -4,7 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import './index.css';
 import Overview from './containers/Overview';
-import Nav from './components/Nav/Nav';
+import Navigation from './components/Nav/Navigation';
 import * as serviceWorker from './serviceWorker';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <div>
-                    <Nav />
+                    <Navigation />
                     <Route exact path="/" component={Overview} />
                 </div>
             </BrowserRouter>

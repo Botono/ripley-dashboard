@@ -3,7 +3,6 @@ import { isNull } from 'lodash';
 import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 
-import Nav from '../components/Nav/Nav';
 import AuthModal from '../components/AuthModal';
 import ChangelogTable from '../components/Changelog/ChangelogTable'
 import WaterSummaryChart from '../components/Water/WaterSummaryChart';
