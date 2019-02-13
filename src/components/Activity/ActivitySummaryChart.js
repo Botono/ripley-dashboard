@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
+import Form from 'react-bootstrap/Form';
 import { isEmpty, keys, takeRight } from 'lodash';
+
 import Config from '../../common/config';
 
 
@@ -17,12 +19,14 @@ class ActivitySummaryChart extends Component {
 
     componentDidUpdate(prevProps) {
         if (isEmpty(prevProps) || keys(prevProps.chart_data).length !== keys(this.props.chart_data).length) {
-            this.setState(
-                {
-                    chart_data: this.formatChartData(this.props.chart_data)
-                }
-            );
+            this.formatChartData();
         }
+    }
+
+    changeChartNumber = (e) => {
+        this.setState({
+            days_to_show: parseInt(e.target.value),
+        }, this.formatChartData);
     }
 
     getBarColor = (value) => {
@@ -37,8 +41,9 @@ class ActivitySummaryChart extends Component {
         }
     }
 
-    formatChartData = (chart_data) => {
-        let chart_keys = keys(chart_data);
+    formatChartData = () => {
+        let { chart_data } = this.props;
+        let chart_keys = takeRight(keys(chart_data), this.state.days_to_show);
 
         let labels = [];
         let dataset_data = [];
@@ -50,8 +55,6 @@ class ActivitySummaryChart extends Component {
             colors.push(this.getBarColor(chart_data[key].activity_value));
         });
 
-        dataset_data = takeRight(dataset_data, this.state.days_to_show);
-
         let data = {
             labels: labels,
             datasets: [{
@@ -62,14 +65,16 @@ class ActivitySummaryChart extends Component {
             },]
         }
 
-        return data;
+        this.setState({
+            chart_data: data,
+        });
     }
 
     render() {
         return (
             <div className="chart-wrapper">
                 <div className="chart-title">
-                    Daily Activity: Last {this.state.days_to_show} Days
+                    Daily Activity: Last <Form.Control type="number" step="1" size="sm" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
                 </div>
                 <div className="chart-stage">
                     <Bar
@@ -87,8 +92,8 @@ class ActivitySummaryChart extends Component {
                         />
                 </div>
                 <div className="chart-notes">
-                    Notes about this chart
-                    </div>
+
+                </div>
             </div>
         );
     }

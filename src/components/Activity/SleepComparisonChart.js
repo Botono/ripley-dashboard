@@ -63,9 +63,9 @@ class SleepComparisonChart extends Component {
             dataset_data = [];
 
             chart_data[key].forEach((dataObj, idx) => {
-                if (idx < 9) {
+                if (idx < 8) { // Only midnight to 7AM
                     labels.push(dataObj.time);
-                    dataset_data.push(dataObj.activity_value);
+                    dataset_data.push(Math.max(Math.round(dataObj.activity_value / 5.5), 1));
                 }
 
             });
@@ -74,7 +74,9 @@ class SleepComparisonChart extends Component {
                 data: dataset_data,
                 label: key,
                 borderColor: Config.bar_graph_colors[date_idx],
+                fill: false,
                 pointRadius: 3,
+                tension: 0.2,
             })
         });
 
@@ -104,7 +106,8 @@ class SleepComparisonChart extends Component {
                                         labelString: 'Activity'
                                     },
                                     ticks: {
-                                        beginAtZero: true   // minimum value will be 0.
+                                        beginAtZero: true,   // minimum value will be 0.
+                                        suggestedMax: 500,
                                     }
                                 }]
                             }

@@ -69,8 +69,9 @@ class Overview extends Component {
     getActivityData = () => {
         let that = this,
             params = {
-                startDate: moment().subtract(10, 'd').format('YYYY-MM-DD'),
-                endDate: moment().format('YYYY-MM-DD'),
+                // startDate: moment().subtract(10, 'd').format('YYYY-MM-DD'),
+                // endDate: moment().format('YYYY-MM-DD'),
+                numberOfDays: 30,
                 resolution: 'daily',
             };
 
