@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { isNull } from 'lodash';
 import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
@@ -8,7 +9,7 @@ import ChangelogTable from '../components/Changelog/ChangelogTable'
 import WaterSummaryChart from '../components/Water/WaterSummaryChart';
 import ActivitySummaryChart from '../components/Activity/ActivitySummaryChart';
 
-import { fetchData } from '../common/utils'
+import { fetchData, isApiKeyMissing } from '../common/utils'
 
 
 class Overview extends Component {
@@ -16,7 +17,7 @@ class Overview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_auth_modal: false,
+            redirect_to_login: false,
             water_data: {},
             water_data_loading: true,
             changelog_data: [],
@@ -29,16 +30,11 @@ class Overview extends Component {
     }
 
     apiKeyMissing = () => {
-        let keyMissing = isNull(window.localStorage.getItem('api-key'));
+        let keyMissing = isApiKeyMissing();
         this.setState({
-            show_auth_modal: keyMissing,
+            redirect_to_login: keyMissing,
         });
         return keyMissing;
-    }
-
-    setApiKey = (value) => {
-        window.localStorage.setItem('api-key', value);
-        setTimeout(this.initializeData, 1500);
     }
 
     initializeData = () => {
@@ -88,6 +84,10 @@ class Overview extends Component {
 
 
     render() {
+        if (this.state.redirect_to_login) {
+            return <Redirect to="/login" />
+        }
+
         return (
             <Container fluid className="rootContainer">
 

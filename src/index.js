@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from "react-router-dom";
 
 import './index.css';
+import Login from './components/Login';
 import Overview from './containers/Overview';
+import Activity from './containers/Activity';
 import Navigation from './components/Nav/Navigation';
 import * as serviceWorker from './serviceWorker';
 
@@ -14,6 +16,8 @@ class App extends Component {
                 <div>
                     <Navigation />
                     <Route exact path="/" component={Overview} />
+                    <Route path="/activity" component={Activity} />
+                    <Route path="/login" component={Login} />
                 </div>
             </BrowserRouter>
         );

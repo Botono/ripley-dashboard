@@ -23,7 +23,7 @@ code {
 }
 
 .nav {
-  background-color: #313a60;
+  background-color: #443d3b;
 }
 
 .nav a {
@@ -33,6 +33,11 @@ code {
 
 .nav a.is-active {
   text-decoration: underline;
+}
+
+button.btn-primary {
+  background-color: #455287;
+  border-color: #455287;
 }
 
 

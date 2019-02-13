@@ -4,7 +4,6 @@ import { isEmpty, keys, takeRight } from 'lodash';
 import Config from '../../common/config';
 
 
-
 class ActivitySummaryChart extends Component {
 
     constructor(props) {
@@ -26,8 +25,19 @@ class ActivitySummaryChart extends Component {
         }
     }
 
+    getBarColor = (value) => {
+        if (value <= 3000){
+            return Config.palette['red'][6];
+        } else if (value > 3000 && value < 4200) {
+            return Config.palette['lime'][6];
+        } else if (value >= 4200 && value < 6000) {
+            return Config.palette['teal'][6];
+        } else {
+            return Config.palette['blue'][6];
+        }
+    }
+
     formatChartData = (chart_data) => {
-        // { "1/11/2019 8:52:28": { "kibble_eaten": true, "note": "", "water": 1606 }, "1/12/2019 8:49:03": { "kibble_eaten": true, "note": "", "water": 1865 }, };
         let chart_keys = keys(chart_data);
 
         let labels = [];
@@ -37,7 +47,7 @@ class ActivitySummaryChart extends Component {
         chart_keys.forEach((key, idx) => {
             labels.push(key);
             dataset_data.push(chart_data[key].activity_value);
-            colors.push(Config.bar_graph_colors[idx]);
+            colors.push(this.getBarColor(chart_data[key].activity_value));
         });
 
         dataset_data = takeRight(dataset_data, this.state.days_to_show);

@@ -27,3 +27,7 @@ export const fetchData = (url, method, params, body) => {
             return response.json();
         });
 }
+
+export const isApiKeyMissing = () => {
+    return isNil(window.localStorage.getItem('ripley-dashboard-api-key'));
+}
