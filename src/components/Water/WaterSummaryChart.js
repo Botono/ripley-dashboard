@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 import { isEmpty, keys, takeRight } from 'lodash';
 
 import Config from '../../common/config';
@@ -18,17 +20,21 @@ class WaterSummaryChart extends Component {
 
     componentDidUpdate(prevProps) {
         if (isEmpty(prevProps) || keys(prevProps.water_data).length !== keys(this.props.water_data).length ) {
-            this.setState(
-                {
-                    water_chart_data: this.formatWaterData(this.props.water_data)
-                }
-            );
+            this.formatWaterData();
         }
     }
 
-    formatWaterData = (water_data) => {
+    changeChartNumber = (e) => {
+        this.setState({
+            days_to_show: parseInt(e.target.value),
+        }, this.formatWaterData);
+    }
+
+    formatWaterData = () => {
         // { "1/11/2019 8:52:28": { "kibble_eaten": true, "note": "", "water": 1606 }, "1/12/2019 8:49:03": { "kibble_eaten": true, "note": "", "water": 1865 }, };
-        let water_keys = keys(water_data);
+
+        let water_data = this.props.water_data;
+        let water_keys = takeRight(keys(water_data), this.state.days_to_show);
         let labels = [];
         let dataset_data = [];
 
@@ -36,9 +42,6 @@ class WaterSummaryChart extends Component {
             labels.push(key.split(' ')[0]);
             dataset_data.push(water_data[key].water / 1000);
         });
-
-        labels = takeRight(labels, this.state.days_to_show);
-        dataset_data = takeRight(dataset_data, this.state.days_to_show);
 
         let data = {
             labels: labels,
@@ -53,37 +56,38 @@ class WaterSummaryChart extends Component {
             },]
         }
 
-        return data;
+        this.setState({
+            water_chart_data: data,
+        })
     }
 
     render() {
         return (
-            <div className="chart-wrapper">
-                <div className="chart-title">
-                    Water Consumed: Last {this.state.days_to_show} Days
-                </div>
-                <div className="chart-stage">
-                    <Line
-                        data={this.state.water_chart_data}
-                        options={{
-                            scales: {
-                                yAxes: [{
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Liters'
-                                    },
-                                    ticks: {
-                                        beginAtZero: true   // minimum value will be 0.
-                                    }
-                                }]
-                            }
-                        }}
-                    />
-                </div>
-                <div className="chart-notes">
-                    Notes about this chart
+            <Card>
+                <Card.Header>
+                    Water Consumed: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                </Card.Header>
+                <Card.Body>
+                    <div className="chart-stage">
+                        <Line
+                            data={this.state.water_chart_data}
+                            options={{
+                                scales: {
+                                    yAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Liters'
+                                        },
+                                        ticks: {
+                                            beginAtZero: true   // minimum value will be 0.
+                                        }
+                                    }]
+                                }
+                            }}
+                        />
                     </div>
-            </div>
+                </Card.Body>
+            </Card>
         );
     }
 }

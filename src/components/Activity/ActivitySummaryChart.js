@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 import { isEmpty, keys, takeRight } from 'lodash';
 
 import Config from '../../common/config';
@@ -72,29 +73,29 @@ class ActivitySummaryChart extends Component {
 
     render() {
         return (
-            <div className="chart-wrapper">
-                <div className="chart-title">
-                    Daily Activity: Last <Form.Control type="number" step="1" size="sm" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
-                </div>
-                <div className="chart-stage">
-                    <Bar
-                        data={this.state.chart_data}
-                        options={{
-                            scales: {
-                                yAxes: [{
-                                    display: true,
-                                    ticks: {
-                                        beginAtZero: true   // minimum value will be 0.
-                                    }
-                                }]
-                            }
-                        }}
+            <Card>
+                <Card.Header>
+                    Daily Activity: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                </Card.Header>
+                <Card.Body>
+                    <div className="chart-stage">
+                        <Bar
+                            data={this.state.chart_data}
+                            options={{
+                                scales: {
+                                    yAxes: [{
+                                        display: true,
+                                        ticks: {
+                                            beginAtZero: true   // minimum value will be 0.
+                                        }
+                                    }]
+                                }
+                            }}
                         />
-                </div>
-                <div className="chart-notes">
+                    </div>
+                </Card.Body>
+            </Card>
 
-                </div>
-            </div>
         );
     }
 }

@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 
 import SleepComparisonChart from '../components/Activity/SleepComparisonChart';
+import MorningWalkComparisonChart from '../components/Activity/MorningWalkComparisonChart';
 
 import { fetchData, isApiKeyMissing } from '../common/utils'
 
@@ -78,8 +79,11 @@ class Activiy extends Component {
         return (
             <Container fluid className="rootContainer">
                 <Row>
-                    <Col>
+                    <Col sm={6}>
                         <SleepComparisonChart chart_data={this.state.hourly_data} />
+                    </Col>
+                    <Col sm={6}>
+                        <MorningWalkComparisonChart chart_data={this.state.hourly_data} />
                     </Col>
                 </Row>
             </Container>

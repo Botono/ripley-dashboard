@@ -13,11 +13,6 @@ class Navigation extends Component {
                         Ripley's Dashboard
                     </NavLink>
                 </Navbar.Brand>
-
-                <Nav.Item>
-                    <NavLink to="/activity" activeClassName='is-active'>Activity</NavLink>
-                </Nav.Item>
-
             </Navbar>
         );
     }

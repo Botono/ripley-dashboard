@@ -14,12 +14,12 @@ code {
 }
 
 .rootContainer {
-  padding-top: 40px;
+  padding-top: 30px;
 }
 
 .changelog-table {
   overflow-y: scroll;
-  max-height: 650px;
+  max-height: 260px;
 }
 
 .nav {
@@ -40,4 +40,26 @@ button.btn-primary {
   border-color: #455287;
 }
 
+.input-inline {
+  display: inline;
+  width: 50px;
+}
 
+.row {
+  margin-bottom: 20px;
+}
+
+.loading-overlay-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.loading-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
-import { isEmpty, keys, takeRight } from 'lodash';
+import { Line, Bar } from 'react-chartjs-2';
+import { isEmpty, keys, takeRight, includes } from 'lodash';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
 import Config from '../../common/config';
 
 
-class SleepComparisonChart extends Component {
+class EveningWalkComparisonChart extends Component {
 
     constructor(props) {
         super(props);
@@ -58,34 +58,38 @@ class SleepComparisonChart extends Component {
         let data_keys = takeRight(keys(chart_data), this.state.days_to_show);
         let labels = [];
         let dataset_data = [];
-        let datasets = [];
+        let activity_total;
+        let valid_indexes = [16, 17, 18];
+        let colors = [];
 
         data_keys.forEach((key, date_idx) => { // '2019-02-01'
-            labels = [];
-            dataset_data = [];
+            labels.push(key);
+            activity_total = 0;
 
-            chart_data[key].forEach((dataObj, idx) => {
-                if (idx < 8) { // Only midnight to 7AM
-                    labels.push(dataObj.time);
-                    dataset_data.push(Math.max(Math.round(dataObj.activity_value / 5.5), 1));
+            valid_indexes.forEach(idx => {
+                if (chart_data[key][idx]) {
+                    activity_total += Math.max(Math.round(chart_data[key][idx].activity_value / 5.5), 1);
+                } else {
+                    activity_total += 1;
                 }
-
             });
 
-            datasets.push({
-                data: dataset_data,
-                label: key,
-                borderColor: Config.bar_graph_colors[date_idx],
-                borderWidth: 1,
-                fill: false,
-                pointRadius: 3,
-            })
+            dataset_data.push(activity_total);
+            colors.push(Config.bar_graph_colors[date_idx])
         });
 
 
         let data = {
             labels: labels,
-            datasets: datasets,
+            datasets: [{
+                data: dataset_data,
+                label: 'Evening Walk Activity',
+                borderColor: colors,
+                backgroundColor: colors,
+                borderWidth: 1,
+                fill: false,
+                pointRadius: 3,
+            }],
         };
 
         return data;
@@ -95,27 +99,24 @@ class SleepComparisonChart extends Component {
         return (
             <Card>
                 <Card.Header>
-                    Sleep Activity: Last {this.state.days_to_show} Days
+                    Evening Walk Activity: Last {this.state.days_to_show} Days
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">
-                        <Line
+                        <Bar
                             data={this.state.chart_data}
                             options={{
                                 scales: {
                                     yAxes: [{
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Activity'
-                                        },
+                                        display: true,
                                         ticks: {
-                                            beginAtZero: true,   // minimum value will be 0.
-                                            suggestedMax: 500,
+                                            beginAtZero: true   // minimum value will be 0.
                                         }
                                     }]
                                 }
                             }}
                         />
+
                     </div>
                 </Card.Body>
             </Card>
@@ -123,4 +124,4 @@ class SleepComparisonChart extends Component {
     }
 }
 
-export default SleepComparisonChart;
+export default EveningWalkComparisonChart;

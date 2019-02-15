@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { isEmpty, keys, takeRight } from 'lodash';
-import Table from 'react-bootstrap/Table';
+
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
@@ -86,20 +86,19 @@ class ChangelogTable extends Component {
 
     render() {
         return (
-            <div className="chart-wrapper ">
-                <div className="chart-title">
-                    Changelog
-                </div>
-                <div className="changelog-table">
+            <Card>
+                <Card.Header>Changelog</Card.Header>
+                <Card.Body>
                     <Form.Control
                         size="sm"
                         type="text"
                         placeholder="Filter"
                         onChange={this.handleFilterChange} />
-                    {this.getTableRows()}
-
-                </div>
-            </div>
+                    <div className="changelog-table">
+                        {this.getTableRows()}
+                    </div>
+                </Card.Body>
+            </Card>
         );
     }
 }
