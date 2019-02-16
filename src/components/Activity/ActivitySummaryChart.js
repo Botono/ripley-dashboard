@@ -76,7 +76,7 @@ class ActivitySummaryChart extends Component {
         return (
             <Card>
                 <Card.Header>
-                    Daily Activity: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                    Daily Activity: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">

@@ -41,7 +41,11 @@ button.btn-primary {
 }
 
 .input-inline {
-  display: inline;
+  display: inline-block;
+  width: 70%;
+}
+
+.input-inline.small {
   width: 50px;
 }
 
@@ -62,4 +66,8 @@ button.btn-primary {
   position: relative;
   height: 100%;
   width: 100%;
+}
+
+.card-body .chart-stage {
+  margin: -10px;
 }

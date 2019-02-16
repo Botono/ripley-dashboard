@@ -88,13 +88,16 @@ class ChangelogTable extends Component {
     render() {
         return (
             <Card>
-                <Card.Header>Changelog</Card.Header>
-                <Card.Body>
+                <Card.Header>
+                    Changelog&nbsp;
                     <Form.Control
                         size="sm"
                         type="text"
                         placeholder="Filter"
+                        className="input-inline"
                         onChange={this.handleFilterChange} />
+                </Card.Header>
+                <Card.Body>
                     <div className="changelog-table">
                         {this.getTableRows()}
                     </div>

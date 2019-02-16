@@ -66,7 +66,7 @@ class WaterSummaryChart extends Component {
         return (
             <Card>
                 <Card.Header>
-                    Water Consumed: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                    Water Consumed: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">
