@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import { isEmpty, keys, takeRight } from 'lodash';
+import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
@@ -74,10 +75,10 @@ class SleepComparisonChart extends Component {
 
             datasets.push({
                 data: dataset_data,
-                label: key,
+                label: moment(key).format('MMM D'),
                 borderColor: Config.bar_graph_colors[date_idx],
-                borderWidth: 1,
                 fill: false,
+                borderWidth: 1,
                 pointRadius: 3,
             })
         });

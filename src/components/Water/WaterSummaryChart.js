@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import { isEmpty, keys, takeRight } from 'lodash';
+import moment from 'moment';
 
 import Config from '../../common/config';
 
@@ -39,7 +40,7 @@ class WaterSummaryChart extends Component {
         let dataset_data = [];
 
         water_keys.forEach(key => {
-            labels.push(key.split(' ')[0]);
+            labels.push(moment(key.split(' ')[0]).format('MMM D'));
             dataset_data.push(water_data[key].water / 1000);
         });
 
@@ -72,6 +73,7 @@ class WaterSummaryChart extends Component {
                         <Line
                             data={this.state.water_chart_data}
                             options={{
+                                legend: false,
                                 scales: {
                                     yAxes: [{
                                         scaleLabel: {
@@ -79,7 +81,8 @@ class WaterSummaryChart extends Component {
                                             labelString: 'Liters'
                                         },
                                         ticks: {
-                                            beginAtZero: true   // minimum value will be 0.
+                                            suggestedMax: 2.0,
+                                            beginAtZero: true,
                                         }
                                     }]
                                 }

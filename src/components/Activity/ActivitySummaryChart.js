@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import { isEmpty, keys, takeRight } from 'lodash';
+import moment from 'moment';
 
 import Config from '../../common/config';
 
@@ -51,7 +52,7 @@ class ActivitySummaryChart extends Component {
         let colors = [];
 
         chart_keys.forEach((key, idx) => {
-            labels.push(key);
+            labels.push(moment(key).format('MMM D'));
             dataset_data.push(chart_data[key].activity_value);
             colors.push(this.getBarColor(chart_data[key].activity_value));
         });
@@ -82,6 +83,7 @@ class ActivitySummaryChart extends Component {
                         <Bar
                             data={this.state.chart_data}
                             options={{
+                                legend: false,
                                 scales: {
                                     yAxes: [{
                                         display: true,

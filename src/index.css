@@ -19,7 +19,7 @@ code {
 
 .changelog-table {
   overflow-y: scroll;
-  max-height: 260px;
+  max-height: 69vh; /* nice */
 }
 
 .nav {

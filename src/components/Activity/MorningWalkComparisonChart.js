@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import { isEmpty, keys, takeRight, includes } from 'lodash';
+import sma from 'sma';
+import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
@@ -20,50 +22,34 @@ class MorningWalkComparisonChart extends Component {
 
     componentDidUpdate(prevProps) {
         if (isEmpty(prevProps) || keys(prevProps.chart_data).length !== keys(this.props.chart_data).length) {
-            this.setState(
-                {
-                    chart_data: this.formatData(this.props.chart_data)
-                }
-            );
+            this.formatData();
         }
     }
 
-    formatData = (chart_data) => {
-        // {
-        //     "2019-02-09": [
-        //         {
-        //             "activity_goal": 23100,
-        //             "activity_value": 587,
-        //             "date": "2019-02-09",
-        //             "distance_in_miles": 0.07,
-        //             "kcalories": 34,
-        //             "min_active": 14,
-        //             "min_play": 0,
-        //             "min_rest": 46,
-        //             "time": "00:00:00"
-        //         },
-        //         {
-        //             "activity_goal": 23100,
-        //             "activity_value": 30,
-        //             "date": "2019-02-09",
-        //             "distance_in_miles": 0,
-        //             "kcalories": 23,
-        //             "min_active": 7,
-        //             "min_play": 0,
-        //             "min_rest": 53,
-        //             "time": "01:00:00"
-        //         },
-        //     ]
-        // }
+    getBarColor = (value) => {
+        if (value <= 300) {
+            return Config.palette['red'][6];
+        } else if (value > 300 && value < 400) {
+            return Config.palette['lime'][6];
+        } else if (value >= 400 && value < 700) {
+            return Config.palette['teal'][6];
+        } else {
+            return Config.palette['blue'][6];
+        }
+    }
+
+    formatData = () => {
+        let { chart_data } = this.props;
         let data_keys = takeRight(keys(chart_data), this.state.days_to_show);
         let labels = [];
         let dataset_data = [];
         let activity_total;
         let valid_indexes = [8,9];
         let colors = [];
+        let moving_average_data;
 
         data_keys.forEach((key, date_idx) => { // '2019-02-01'
-            labels.push(key);
+            labels.push(moment(key).format('MMM D'));
             activity_total = 0;
 
             valid_indexes.forEach(idx => {
@@ -75,31 +61,55 @@ class MorningWalkComparisonChart extends Component {
             });
 
             dataset_data.push(activity_total);
-            colors.push(Config.bar_graph_colors[date_idx])
+            colors.push(this.getBarColor(activity_total))
         });
 
+        moving_average_data = sma(dataset_data, 3);
+        moving_average_data.unshift(null, null, null);
 
         let data = {
             labels: labels,
-            datasets: [{
-                data: dataset_data,
-                label: 'Morning Walk Activity',
-                borderColor: colors,
-                backgroundColor: colors,
-                borderWidth: 1,
-                fill: false,
-                pointRadius: 3,
-            }],
+            datasets: [
+                {
+                    type: 'line',
+                    data: moving_average_data,
+                    label: 'Moving Average',
+                    borderColor: Config.palette.gray[6],
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 0,
+                },
+                {
+                    type: 'bar',
+                    data: dataset_data,
+                    label: 'Morning Walk Activity',
+                    borderColor: colors,
+                    backgroundColor: colors,
+                    borderWidth: 1,
+                    fill: false,
+                },
+            ],
         };
 
-        return data;
+        this.setState(
+            {
+                chart_data: data
+            }
+        );
     }
+
+    changeChartNumber = (e) => {
+        this.setState({
+            days_to_show: parseInt(e.target.value),
+        }, this.formatData);
+    }
+
 
     render() {
         return (
             <Card>
                 <Card.Header>
-                    Morning Walk Activity: Last {this.state.days_to_show} Days
+                    Morning Walk Activity: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">

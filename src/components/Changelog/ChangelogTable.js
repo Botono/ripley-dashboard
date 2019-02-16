@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { isEmpty, keys, takeRight } from 'lodash';
+import moment from 'moment';
 
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -68,7 +69,7 @@ class ChangelogTable extends Component {
                 <Card key={idx}>
                     <Card.Header>
                         <i className={classes}></i>&nbsp;
-                        {row.date}
+                        {moment(row.date).format('MMMM D YYYY')}
                     </Card.Header>
                     <Card.Body>
                         {row.message}

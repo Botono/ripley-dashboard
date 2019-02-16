@@ -31,11 +31,11 @@ class Overview extends Component {
 
     componentDidMount() {
         this.initializeData();
-        this.dataInterval = setInterval(this.initializeData, 1000);
+        this.dataInterval = setInterval(this.initializeData, 1000 * 60 * 60);
     }
 
     componentWillUnmount() {
-
+        clearInterval(this.dataInterval);
     }
 
     apiKeyMissing = () => {
@@ -48,9 +48,9 @@ class Overview extends Component {
 
     initializeData = () => {
         if (!this.apiKeyMissing()) {
-            this.getWaterData();
-            this.getDailyActivity();
             this.getHourlyActivity();
+            this.getDailyActivity();
+            this.getWaterData();
             this.getChangelogData();
         }
     }
@@ -114,29 +114,36 @@ class Overview extends Component {
         return (
             <Container fluid className="rootContainer">
                 <Row>
-                    <Col sm={4}>
-                        <ActivitySummaryChart chart_data={this.state.activity_data_daily} />
-                    </Col>
-                    <Col sm={4}>
-                        <WaterSummaryChart
-                            getWaterData={this.getWaterData}
-                            water_data={this.state.water_data}
-                            loading={this.state.water_data_loading}
-                        />
+                    <Col sm={8}>
+                        <Row>
+                            <Col sm={6}>
+                                <ActivitySummaryChart chart_data={this.state.activity_data_daily} />
+                            </Col>
+                            <Col sm={6}>
+                                <WaterSummaryChart
+                                    getWaterData={this.getWaterData}
+                                    water_data={this.state.water_data}
+                                    loading={this.state.water_data_loading}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+
+                            <Col sm={6}>
+                                <MorningWalkComparisonChart chart_data={this.state.activity_data_hourly} />
+                            </Col>
+                            <Col sm={6}>
+                                <EveningWalkComparisonChart chart_data={this.state.activity_data_hourly} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <SleepComparisonChart chart_data={this.state.activity_data_hourly} />
+                            </Col>
+                        </Row>
                     </Col>
                     <Col sm={4}>
                         <ChangelogTable changelog_data={this.state.changelog_data} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col sm={4}>
-                        <SleepComparisonChart chart_data={this.state.activity_data_hourly} />
-                    </Col>
-                    <Col sm={4}>
-                        <MorningWalkComparisonChart chart_data={this.state.activity_data_hourly} />
-                    </Col>
-                    <Col sm={4}>
-                        <EveningWalkComparisonChart chart_data={this.state.activity_data_hourly} />
                     </Col>
                 </Row>
 
