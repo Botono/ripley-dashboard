@@ -30,32 +30,6 @@ class SleepComparisonChart extends Component {
     }
 
     formatData = (chart_data) => {
-        // {
-        //     "2019-02-09": [
-        //         {
-        //             "activity_goal": 23100,
-        //             "activity_value": 587,
-        //             "date": "2019-02-09",
-        //             "distance_in_miles": 0.07,
-        //             "kcalories": 34,
-        //             "min_active": 14,
-        //             "min_play": 0,
-        //             "min_rest": 46,
-        //             "time": "00:00:00"
-        //         },
-        //         {
-        //             "activity_goal": 23100,
-        //             "activity_value": 30,
-        //             "date": "2019-02-09",
-        //             "distance_in_miles": 0,
-        //             "kcalories": 23,
-        //             "min_active": 7,
-        //             "min_play": 0,
-        //             "min_rest": 53,
-        //             "time": "01:00:00"
-        //         },
-        //     ]
-        // }
         let data_keys = takeRight(keys(chart_data), this.state.days_to_show);
         let labels = [];
         let dataset_data = [];
@@ -67,7 +41,7 @@ class SleepComparisonChart extends Component {
 
             chart_data[key].forEach((dataObj, idx) => {
                 if (idx < 8) { // Only midnight to 7AM
-                    labels.push(dataObj.time);
+                    labels.push(moment(`${key} ${dataObj.time}`).format('h A'));
                     dataset_data.push(Math.max(Math.round(dataObj.activity_value / 5.5), 1));
                 }
 
@@ -104,6 +78,14 @@ class SleepComparisonChart extends Component {
                             data={this.state.chart_data}
                             options={{
                                 scales: {
+
+                                    xAxes: [{
+                                        offset: 50,
+                                        ticks: { labelOffset: -50,},
+                                        gridLines: {
+                                            offsetGridLines: true
+                                        },
+                                    }],
                                     yAxes: [{
                                         scaleLabel: {
                                             display: true,
@@ -112,7 +94,7 @@ class SleepComparisonChart extends Component {
                                         ticks: {
                                             beginAtZero: true,   // minimum value will be 0.
                                             suggestedMax: 500,
-                                        }
+                                        },
                                     }]
                                 }
                             }}
