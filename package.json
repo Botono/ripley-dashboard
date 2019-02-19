@@ -20,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "scp -r ./build/* botono9@ripley.dog:ripley.dog/public/dashboard"
   },
   "eslintConfig": {
     "extends": "react-app"

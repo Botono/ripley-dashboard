@@ -146,6 +146,7 @@ class BloodworkComparisonChart extends Component {
 
     render() {
         let chart_options = {
+            legend: false,
             scales: {
                 yAxes: [{
                     display: true,
