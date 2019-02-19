@@ -10,6 +10,7 @@ import ActivitySummaryChart from '../components/Activity/ActivitySummaryChart';
 import SleepComparisonChart from '../components/Activity/SleepComparisonChart';
 import MorningWalkComparisonChart from '../components/Activity/MorningWalkComparisonChart';
 import EveningWalkComparisonChart from '../components/Activity/EveningWalkComparisonChart';
+import BloodworkComparisonChart from '../components/Bloodwork/BloodworkComparisonChart';
 
 import { fetchData, isApiKeyMissing } from '../common/utils'
 
@@ -26,6 +27,8 @@ class Overview extends Component {
             activity_data_hourly: {},
             activity_data_daily: {},
             changelog_data: [],
+            bloodwork_data: {},
+            bloodwork_labels: [],
         };
     }
 
@@ -52,6 +55,8 @@ class Overview extends Component {
             this.getDailyActivity();
             this.getWaterData();
             this.getChangelogData();
+            this.getBloodworkLabels();
+            this.getBloodworkData();
         }
     }
 
@@ -106,6 +111,26 @@ class Overview extends Component {
             });
     }
 
+    getBloodworkData = () => {
+        let that = this;
+        fetchData('/bloodwork')
+            .then(function (json_data) {
+                that.setState({
+                    bloodwork_data: json_data,
+                });
+            });
+    }
+
+    getBloodworkLabels = () => {
+        let that = this;
+        fetchData('/bloodwork/labels')
+            .then(function (json_data) {
+                that.setState({
+                    bloodwork_labels: json_data,
+                });
+            });
+    }
+
     render() {
         if (this.state.redirect_to_login) {
             return <Redirect to="/login" />
@@ -137,8 +162,11 @@ class Overview extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
+                            <Col sm={6}>
                                 <SleepComparisonChart chart_data={this.state.activity_data_hourly} />
+                            </Col>
+                            <Col sm={6}>
+                                <BloodworkComparisonChart chart_data={this.state.bloodwork_data} bloodwork_labels={this.state.bloodwork_labels} />
                             </Col>
                         </Row>
                     </Col>
