@@ -93,7 +93,7 @@ class SleepComparisonChart extends Component {
                                         },
                                         ticks: {
                                             beginAtZero: true,   // minimum value will be 0.
-                                            suggestedMax: 500,
+                                            suggestedMax: 200,
                                         },
                                     }]
                                 }
