@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import { isNull } from 'util';
 
 
 
@@ -62,21 +63,43 @@ class ChangelogTable extends Component {
             Medicine: 'prescription',
             Other: 'question',
         };
-        return this.state.filtered_data.map((row, idx) => {
-            let classes = `fas fa-${msgTypeIconMap[row.type]}`;
+        let rows = [];
+        let current_date = null;
+        let grouped_messages = [];
 
-            return (
-                <Card key={idx}>
-                    <Card.Header>
-                        <i className={classes}></i>&nbsp;
-                        {moment(row.date).format('MMMM D YYYY')}
-                    </Card.Header>
-                    <Card.Body>
-                        {row.message}
-                    </Card.Body>
-                </Card>
+        this.state.filtered_data.forEach((row, idx) => {
+            let classes = `fa-li fa fa-${msgTypeIconMap[row.type]}`;
+
+            if (isNull(current_date)) {
+                current_date = row.date;
+            }
+
+            if (row.date !== current_date) {
+                rows.push(
+                    <Card key={idx}>
+                        <Card.Header>
+                            {moment(current_date).format('MMMM D, YYYY')}
+                        </Card.Header>
+                        <Card.Body>
+                            <ul className="fa-ul">
+                                {grouped_messages}
+                            </ul>
+                        </Card.Body>
+                    </Card>
+                );
+                grouped_messages = [];
+                current_date = row.date;
+            }
+
+            grouped_messages.push(
+                <li>
+                    <i className={classes}></i>
+                    {row.message}
+                </li>
             )
         });
+
+        return rows;
     }
 
     handleFilterChange = (e) => {
