@@ -20,7 +20,7 @@ export const fetchData = (url, method, params, body) => {
     return fetch(fetchUrl, {
         method: method,
         headers: {
-            "x-api-key": window.localStorage.getItem('api-key'),
+            "x-api-key": window.localStorage.getItem('ripley-dashboard-api-key'),
         },
     })
         .then(function (response) {

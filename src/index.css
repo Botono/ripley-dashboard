@@ -71,3 +71,7 @@ button.btn-primary {
 .card-body .chart-stage {
   margin: -10px;
 }
+
+.align-right {
+  float: right;
+}

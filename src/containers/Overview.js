@@ -25,10 +25,14 @@ class Overview extends Component {
             water_data: {},
             water_data_loading: true,
             activity_data_hourly: {},
+            activity_hourly_loading: true,
             activity_data_daily: {},
+            activity_daily_loading: true,
             changelog_data: [],
+            changelog_loading: true,
             bloodwork_data: {},
             bloodwork_labels: [],
+            bloodwork_loading: true,
         };
     }
 
@@ -62,6 +66,9 @@ class Overview extends Component {
 
     getWaterData = () => {
         let that = this;
+        this.setState({
+            water_data_loading: true,
+        });
         fetchData('/water')
             .then(function (json_data) {
                 that.setState({
@@ -78,10 +85,15 @@ class Overview extends Component {
                 resolution: 'hourly',
             };
 
+        this.setState({
+            activity_hourly_loading: true,
+        });
+
         fetchData('/fitbark/activity', 'GET', params)
             .then(function (json_data) {
                 that.setState({
                     activity_data_hourly: json_data,
+                    activity_hourly_loading: false,
                 });
             });
     }
@@ -93,30 +105,47 @@ class Overview extends Component {
                 resolution: 'daily',
             };
 
+        this.setState({
+            activity_daily_loading: true,
+        });
+
         fetchData('/fitbark/activity', 'GET', params)
             .then(function (json_data) {
                 that.setState({
                     activity_data_daily: json_data,
+                    activity_daily_loading: false,
                 });
             });
     }
 
     getChangelogData = () => {
         let that = this;
+
+        this.setState({
+            changelog_loading: true,
+        });
+
         fetchData('/changelog')
             .then(function (json_data) {
                 that.setState({
                     changelog_data: json_data,
+                    changelog_loading: false,
                 });
             });
     }
 
     getBloodworkData = () => {
         let that = this;
+
+        this.setState({
+            bloodwork_loading: true,
+        });
+
         fetchData('/bloodwork')
             .then(function (json_data) {
                 that.setState({
                     bloodwork_data: json_data,
+                    bloodwork_loading: false,
                 });
             });
     }
@@ -142,7 +171,10 @@ class Overview extends Component {
                     <Col sm={8}>
                         <Row>
                             <Col sm={6}>
-                                <ActivitySummaryChart chart_data={this.state.activity_data_daily} />
+                                <ActivitySummaryChart
+                                    chart_data={this.state.activity_data_daily}
+                                    loading={this.state.activity_daily_loading}
+                                />
                             </Col>
                             <Col sm={6}>
                                 <WaterSummaryChart
@@ -155,23 +187,39 @@ class Overview extends Component {
                         <Row>
 
                             <Col sm={6}>
-                                <MorningWalkComparisonChart chart_data={this.state.activity_data_hourly} />
+                                <MorningWalkComparisonChart
+                                    chart_data={this.state.activity_data_hourly}
+                                    loading={this.state.activity_hourly_loading}
+                                />
                             </Col>
                             <Col sm={6}>
-                                <EveningWalkComparisonChart chart_data={this.state.activity_data_hourly} />
+                                <EveningWalkComparisonChart
+                                    chart_data={this.state.activity_data_hourly}
+                                    loading={this.state.activity_hourly_loading}
+                                />
                             </Col>
                         </Row>
                         <Row>
                             <Col sm={6}>
-                                <SleepComparisonChart chart_data={this.state.activity_data_hourly} />
+                                <SleepComparisonChart
+                                    chart_data={this.state.activity_data_hourly}
+                                    loading={this.state.activity_hourly_loading}
+                                />
                             </Col>
                             <Col sm={6}>
-                                <BloodworkComparisonChart chart_data={this.state.bloodwork_data} bloodwork_labels={this.state.bloodwork_labels} />
+                                <BloodworkComparisonChart
+                                    chart_data={this.state.bloodwork_data}
+                                    bloodwork_labels={this.state.bloodwork_labels}
+                                    loading={this.state.bloodwork_loading}
+                                />
                             </Col>
                         </Row>
                     </Col>
                     <Col sm={4}>
-                        <ChangelogTable changelog_data={this.state.changelog_data} />
+                        <ChangelogTable
+                            changelog_data={this.state.changelog_data}
+                            loading={this.state.changelog_loading}
+                        />
                     </Col>
                 </Row>
 

@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import { isEmpty, keys, takeRight } from 'lodash';
 import moment from 'moment';
 
 import Config from '../../common/config';
+import LoadingRefreshButton from '../LoadingRefreshButton';
+
 
 
 class WaterSummaryChart extends Component {
@@ -63,10 +66,18 @@ class WaterSummaryChart extends Component {
     }
 
     render() {
+        const { loading, getWaterData } = this.props;
+
         return (
             <Card>
                 <Card.Header>
-                    Water Consumed: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                    Water Consumed: Last &nbsp;
+                    <Form.Control type="number" step="1" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> &nbsp;
+                    Days
+                    <LoadingRefreshButton
+                        loading={loading}
+                        clickFunction={getWaterData}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">
