@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { isEmpty, keys, takeRight } from 'lodash';
 import moment from 'moment';
+import { ExportToCsv } from 'export-to-csv';
 
 import Config from '../../common/config';
 import LoadingRefreshButton from '../LoadingRefreshButton';
@@ -32,6 +33,34 @@ class WaterSummaryChart extends Component {
         this.setState({
             days_to_show: parseInt(e.target.value),
         }, this.formatWaterData);
+    }
+
+    exportCSV = () => {
+        const { water_data } = this.props;
+        const options = {
+            filename: 'ripley_water_data',
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalSeparator: '.',
+            showLabels: true,
+            showTitle: true,
+            title: 'Ripley Water Data',
+            useTextFile: false,
+            useBom: true,
+            useKeysAsHeaders: true,
+        };
+        const csvExporter = new ExportToCsv(options);
+
+        let water_rows = [];
+        for (const date in water_data) {
+            let row_obj = {
+                date: date,
+                ...water_data[date]
+            }
+            water_rows.push(row_obj)
+        }
+
+        csvExporter.generateCsv(water_rows);
     }
 
     formatWaterData = () => {
@@ -100,6 +129,16 @@ class WaterSummaryChart extends Component {
                             }}
                         />
                     </div>
+                    <div class="d-flex justify-content-center">
+                        <Button
+                            onClick={this.exportCSV}
+                            size="sm"
+                            variant="link"
+                        >
+                            Download
+                        </Button>
+                    </div>
+
                 </Card.Body>
             </Card>
         );
