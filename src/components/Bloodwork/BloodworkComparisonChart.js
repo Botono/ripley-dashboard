@@ -6,6 +6,7 @@ import { isEmpty, keys, isNull } from 'lodash';
 import moment from 'moment';
 
 import Config from '../../common/config';
+import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
 class BloodworkComparisonChart extends Component {
@@ -145,6 +146,8 @@ class BloodworkComparisonChart extends Component {
     }
 
     render() {
+        const { loading, refreshData } = this.props;
+
         let chart_options = {
             legend: false,
             scales: {
@@ -173,6 +176,10 @@ class BloodworkComparisonChart extends Component {
                         onChange={this.changeChartedItem}>
                         {this.getBloodworkOptions()}
                     </Form.Control>
+                    <LoadingRefreshButton
+                        loading={loading}
+                        clickFunction={refreshData}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">

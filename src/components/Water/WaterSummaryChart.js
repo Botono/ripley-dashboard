@@ -66,7 +66,7 @@ class WaterSummaryChart extends Component {
     }
 
     render() {
-        const { loading, getWaterData } = this.props;
+        const { loading, refreshData } = this.props;
 
         return (
             <Card>
@@ -76,7 +76,7 @@ class WaterSummaryChart extends Component {
                     Days
                     <LoadingRefreshButton
                         loading={loading}
-                        clickFunction={getWaterData}
+                        clickFunction={refreshData}
                     />
                 </Card.Header>
                 <Card.Body>

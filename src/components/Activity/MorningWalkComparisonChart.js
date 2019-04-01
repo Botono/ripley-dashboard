@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
 import Config from '../../common/config';
+import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
 class MorningWalkComparisonChart extends Component {
@@ -106,10 +107,16 @@ class MorningWalkComparisonChart extends Component {
 
 
     render() {
+        const { loading, refreshData } = this.props;
+
         return (
             <Card>
                 <Card.Header>
                     Morning Walk Activity: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                    <LoadingRefreshButton
+                        loading={loading}
+                        clickFunction={refreshData}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">

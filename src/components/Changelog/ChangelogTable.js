@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import { isNull } from 'util';
 
+import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
 class ChangelogTable extends Component {
@@ -109,6 +110,8 @@ class ChangelogTable extends Component {
     }
 
     render() {
+        const { loading, refreshData } = this.props;
+
         return (
             <Card>
                 <Card.Header>
@@ -119,6 +122,10 @@ class ChangelogTable extends Component {
                         placeholder="Filter"
                         className="input-inline"
                         onChange={this.handleFilterChange} />
+                    <LoadingRefreshButton
+                        loading={loading}
+                        clickFunction={refreshData}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <div className="changelog-table">

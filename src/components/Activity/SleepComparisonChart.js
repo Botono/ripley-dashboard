@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
 import Config from '../../common/config';
+import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
 class SleepComparisonChart extends Component {
@@ -67,10 +68,16 @@ class SleepComparisonChart extends Component {
     }
 
     render() {
+        const { loading, refreshData } = this.props;
+
         return (
             <Card>
                 <Card.Header>
                     Sleep Activity: Last {this.state.days_to_show} Days
+                    <LoadingRefreshButton
+                        loading={loading}
+                        clickFunction={refreshData}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">

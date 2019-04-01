@@ -6,6 +6,7 @@ import { isEmpty, keys, takeRight } from 'lodash';
 import moment from 'moment';
 
 import Config from '../../common/config';
+import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
 class ActivitySummaryChart extends Component {
@@ -73,10 +74,16 @@ class ActivitySummaryChart extends Component {
     }
 
     render() {
+        const { loading, refreshData } = this.props;
+
         return (
             <Card>
                 <Card.Header>
                     Daily Activity: Last <Form.Control type="number" step="1" max="30" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> Days
+                    <LoadingRefreshButton
+                        loading={loading}
+                        clickFunction={refreshData}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">

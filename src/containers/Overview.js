@@ -174,11 +174,12 @@ class Overview extends Component {
                                 <ActivitySummaryChart
                                     chart_data={this.state.activity_data_daily}
                                     loading={this.state.activity_daily_loading}
+                                    refreshData={this.getDailyActivity}
                                 />
                             </Col>
                             <Col sm={6}>
                                 <WaterSummaryChart
-                                    getWaterData={this.getWaterData}
+                                    refreshData={this.getWaterData}
                                     water_data={this.state.water_data}
                                     loading={this.state.water_data_loading}
                                 />
@@ -190,12 +191,14 @@ class Overview extends Component {
                                 <MorningWalkComparisonChart
                                     chart_data={this.state.activity_data_hourly}
                                     loading={this.state.activity_hourly_loading}
+                                    refreshData={this.getHourlyActivity}
                                 />
                             </Col>
                             <Col sm={6}>
                                 <EveningWalkComparisonChart
                                     chart_data={this.state.activity_data_hourly}
                                     loading={this.state.activity_hourly_loading}
+                                    refreshData={this.getHourlyActivity}
                                 />
                             </Col>
                         </Row>
@@ -204,6 +207,7 @@ class Overview extends Component {
                                 <SleepComparisonChart
                                     chart_data={this.state.activity_data_hourly}
                                     loading={this.state.activity_hourly_loading}
+                                    refreshData={this.getHourlyActivity}
                                 />
                             </Col>
                             <Col sm={6}>
@@ -211,6 +215,7 @@ class Overview extends Component {
                                     chart_data={this.state.bloodwork_data}
                                     bloodwork_labels={this.state.bloodwork_labels}
                                     loading={this.state.bloodwork_loading}
+                                    refreshData={this.getBloodworkData}
                                 />
                             </Col>
                         </Row>
@@ -219,6 +224,7 @@ class Overview extends Component {
                         <ChangelogTable
                             changelog_data={this.state.changelog_data}
                             loading={this.state.changelog_loading}
+                            refreshData={this.getChangelogData}
                         />
                     </Col>
                 </Row>
