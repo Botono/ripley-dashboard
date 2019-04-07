@@ -6,6 +6,7 @@ import { isEmpty, keys, isNull } from 'lodash';
 import moment from 'moment';
 
 import Config from '../../common/config';
+import { drawRectPlugin } from '../../common/chartPlugins';
 import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
@@ -22,42 +23,7 @@ class BloodworkComparisonChart extends Component {
     }
 
     componentWillMount() {
-        const originalBarDraw = Chart.controllers.bar.prototype.draw;
-        // Extend the line chart, in order to override the draw function.
-        Chart.helpers.extend(Chart.controllers.bar.prototype, {
-            draw: function () {
-                let chart = this.chart;
-                // Get the object that determines the region to highlight.
-                let yHighlightRange = chart.config.data.yHighlightRange;
-
-                // If the object exists.
-                if (yHighlightRange !== undefined) {
-                    let ctx = chart.chart.ctx;
-
-                    let yRangeBegin = yHighlightRange.lower;
-                    let yRangeEnd = yHighlightRange.upper;
-
-                    let xaxis = chart.scales['x-axis-0'];
-                    let yaxis = chart.scales['y-axis-0'];
-
-                    let yRangeBeginPixel = yaxis.getPixelForValue(yRangeBegin);
-                    let yRangeEndPixel = yaxis.getPixelForValue(yRangeEnd);
-
-                    ctx.save();
-
-                    // The fill style of the rectangle we are about to fill.
-                    ctx.fillStyle = 'rgba(100, 100, 100, 0.2)';
-                    // Fill the rectangle that represents the highlight region. The parameters are the closest-to-starting-point pixel's x-coordinate,
-                    // the closest-to-starting-point pixel's y-coordinate, the width of the rectangle in pixels, and the height of the rectangle in pixels, respectively.
-                    ctx.fillRect(xaxis.left, Math.min(yRangeBeginPixel, yRangeEndPixel), xaxis.right - xaxis.left, Math.max(yRangeBeginPixel, yRangeEndPixel) - Math.min(yRangeBeginPixel, yRangeEndPixel));
-
-                    ctx.restore();
-                }
-
-                // Apply the original draw function for the line chart.
-                originalBarDraw.apply(this, arguments);
-            }
-        });
+        Chart.plugins.register(drawRectPlugin);
     }
 
     componentDidUpdate(prevProps) {
@@ -97,7 +63,7 @@ class BloodworkComparisonChart extends Component {
     formatChartData = () => {
         let { chart_data, bloodwork_labels } = this.props;
         let { item_to_chart } = this.state;
-        if (item_to_chart === '') {
+        if (item_to_chart === '' && bloodwork_labels) {
             item_to_chart = bloodwork_labels[0].name;
         }
         let item_obj = this.getLabelObject(item_to_chart);

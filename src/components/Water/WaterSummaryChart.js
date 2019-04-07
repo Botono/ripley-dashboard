@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Line, Chart } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +8,7 @@ import moment from 'moment';
 import { ExportToCsv } from 'export-to-csv';
 
 import Config from '../../common/config';
+import { drawRectPlugin } from '../../common/chartPlugins';
 import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
@@ -21,6 +22,10 @@ class WaterSummaryChart extends Component {
             water_chart_data: {},
             days_to_show: 10,
         };
+    }
+
+    componentDidMount() {
+        Chart.plugins.register(drawRectPlugin);
     }
 
     componentDidUpdate(prevProps) {
@@ -82,11 +87,15 @@ class WaterSummaryChart extends Component {
                 data: dataset_data,
                 label: "Water Drank",
                 borderColor: Config.palette.blue[7],
-                fill: true,
+                fill: 'origin',
                 backgroundColor: Config.palette.blue[7],
                 pointRadius: 3,
                 pointBackgroundColor: Config.palette.blue[5],
-            },]
+            },],
+            yHighlightRange: {
+                upper: 1.63,
+                lower: 0.81,
+            }
         }
 
         this.setState({
@@ -129,7 +138,7 @@ class WaterSummaryChart extends Component {
                             }}
                         />
                     </div>
-                    <div class="d-flex justify-content-center">
+                    <div className="d-flex justify-content-center">
                         <Button
                             onClick={this.exportCSV}
                             size="sm"

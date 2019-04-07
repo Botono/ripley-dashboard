@@ -93,7 +93,7 @@ class ChangelogTable extends Component {
             }
 
             grouped_messages.push(
-                <li>
+                <li key={idx}>
                     <i className={classes}></i>
                     {row.message}
                 </li>
