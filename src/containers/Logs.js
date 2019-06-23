@@ -14,6 +14,7 @@ class Logs extends Component {
         this.state = {
             redirect_to_login: false,
             changelog_data: [],
+            changelog_loading: true,
         };
     }
 
@@ -38,10 +39,16 @@ class Logs extends Component {
 
     getChangelogData = () => {
         let that = this;
+
+        this.setState({
+            changelog_loading: true,
+        });
+
         fetchData('/changelog')
             .then(function (json_data) {
                 that.setState({
                     changelog_data: json_data,
+                    changelog_loading: false,
                 });
             });
     }
@@ -55,7 +62,10 @@ class Logs extends Component {
             <Container fluid className="rootContainer">
                 <Row>
                     <Col>
-                        <ChangelogTable changelog_data={this.state.changelog_data} />
+                        <ChangelogTable
+                            changelog_data={this.state.changelog_data}
+                            loading={this.state.changelog_loading}
+                            refreshData={this.getChangelogData}/>
                     </Col>
                 </Row>
             </Container>

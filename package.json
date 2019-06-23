@@ -22,7 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "scp -r ./build/* botono9@ripley.dog:ripley.dog/public/dashboard"
+    "predeploy": "yarn build",
+    "deploy": "rsync -aP build/ botono9@ripley.dog:ripley.dog/public/dashboard/"
   },
   "eslintConfig": {
     "extends": "react-app"

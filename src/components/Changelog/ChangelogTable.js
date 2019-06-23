@@ -67,6 +67,7 @@ class ChangelogTable extends Component {
         let rows = [];
         let current_date = null;
         let last_date = null;
+        let card_idx = 0;
         let grouped_messages = [];
 
         this.state.filtered_data.forEach((row, idx) => {
@@ -78,7 +79,7 @@ class ChangelogTable extends Component {
 
             if (row.date !== current_date) {
                 rows.push(
-                    <Card key={idx}>
+                    <Card key={card_idx++}>
                         <Card.Header>
                             {moment(current_date).format('MMMM D, YYYY')}
                         </Card.Header>
@@ -94,7 +95,7 @@ class ChangelogTable extends Component {
             }
             last_date = row.date;
             grouped_messages.push(
-                <li key={idx}>
+                <li key={row.messageHash}>
                     <i className={classes}></i>
                     {row.message}
                 </li>
@@ -102,8 +103,9 @@ class ChangelogTable extends Component {
         });
 
         if (grouped_messages.length > 0) {
+            console.log();
             rows.push(
-                <Card key={grouped_messages.length}>
+                <Card key={card_idx++}>
                     <Card.Header>
                         {moment(last_date).format('MMMM D, YYYY')}
                     </Card.Header>
