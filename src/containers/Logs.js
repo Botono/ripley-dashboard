@@ -19,6 +19,7 @@ class Logs extends Component {
     }
 
     componentDidMount() {
+        document.title = 'Dashboard: Changelog';
         this.initializeData();
     }
 

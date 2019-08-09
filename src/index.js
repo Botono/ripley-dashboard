@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from "react-router-dom";
+import { HashRouter, Route } from "react-router-dom";
 
 import './index.css';
 import Login from './components/Login';
@@ -13,7 +13,7 @@ import * as serviceWorker from './serviceWorker';
 class App extends Component {
     render() {
         return (
-            <BrowserRouter basename="/dashboard">
+            <HashRouter>
                 <div>
                     <Navigation />
                     <Route exact path="/" component={Overview} />
@@ -22,7 +22,7 @@ class App extends Component {
 
                     <Route path="/login" component={Login} />
                 </div>
-            </BrowserRouter>
+            </HashRouter>
         );
     }
 }
