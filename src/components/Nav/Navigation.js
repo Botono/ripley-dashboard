@@ -16,6 +16,9 @@ class Navigation extends Component {
                 <Nav.Item>
                     <NavLink to="/logs" activeClassName='is-active'>Changelog</NavLink>
                 </Nav.Item>
+                <Nav.Item>
+                    <NavLink to="/water" activeClassName='is-active'>Water</NavLink>
+                </Nav.Item>
             </Navbar>
         );
     }

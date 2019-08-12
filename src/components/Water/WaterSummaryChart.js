@@ -3,7 +3,7 @@ import { Line, Chart } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { isEmpty, keys, takeRight } from 'lodash';
+import { isEmpty, keys, takeRight, isUndefined } from 'lodash';
 import moment from 'moment';
 import { ExportToCsv } from 'export-to-csv';
 
@@ -72,14 +72,20 @@ class WaterSummaryChart extends Component {
         // { "1/11/2019 8:52:28": { "kibble_eaten": true, "note": "", "water": 1606 }, "1/12/2019 8:49:03": { "kibble_eaten": true, "note": "", "water": 1865 }, };
 
         let water_data = this.props.water_data;
-        let water_keys = takeRight(keys(water_data), this.state.days_to_show);
         let labels = [];
         let dataset_data = [];
 
-        water_keys.forEach(key => {
-            labels.push(moment(key.split(' ')[0]).format('MMM D'));
-            dataset_data.push(water_data[key].water / 1000);
-        });
+        for (let i = this.state.days_to_show-1; i >= 0; i--) {
+            const theDate = moment().subtract(i, 'days');
+            const waterObj = water_data[theDate.format('YYYY-MM-DD')];
+            labels.push(theDate.format('MMM D'));
+            if (isUndefined(waterObj)) {
+                dataset_data.push(null);
+            } else {
+                dataset_data.push(waterObj.water / 1000);
+            }
+
+        }
 
         let data = {
             labels: labels,
@@ -123,6 +129,9 @@ class WaterSummaryChart extends Component {
                             data={this.state.water_chart_data}
                             options={{
                                 legend: false,
+                                responsive: true,
+                                aspectRatio: 0.5,
+
                                 scales: {
                                     yAxes: [{
                                         scaleLabel: {
