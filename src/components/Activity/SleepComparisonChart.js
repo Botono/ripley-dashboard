@@ -22,15 +22,18 @@ class SleepComparisonChart extends Component {
 
     componentDidUpdate(prevProps) {
         if (isEmpty(prevProps) || keys(prevProps.chart_data).length !== keys(this.props.chart_data).length) {
-            this.setState(
-                {
-                    chart_data: this.formatData(this.props.chart_data)
-                }
-            );
+            this.formatData()
         }
     }
 
-    formatData = (chart_data) => {
+    changeChartNumber = (e) => {
+        this.setState({
+            days_to_show: parseInt(e.target.value),
+        }, this.formatData);
+    }
+
+    formatData = () => {
+        const { chart_data } = this.props;
         let data_keys = takeRight(keys(chart_data), this.state.days_to_show);
         let labels = [];
         let dataset_data = [];
@@ -54,7 +57,8 @@ class SleepComparisonChart extends Component {
                 borderColor: Config.bar_graph_colors[date_idx],
                 fill: false,
                 borderWidth: 1,
-                pointRadius: 3,
+                pointRadius: 0,
+                lineTension: 0,
             })
         });
 
@@ -64,7 +68,9 @@ class SleepComparisonChart extends Component {
             datasets: datasets,
         };
 
-        return data;
+        this.setState({
+            chart_data: data,
+        })
     }
 
     render() {
@@ -73,7 +79,9 @@ class SleepComparisonChart extends Component {
         return (
             <Card>
                 <Card.Header>
-                    Sleep Activity: Last {this.state.days_to_show} Days
+                    Sleep Activity:  Last &nbsp;
+                    <Form.Control type="number" step="1" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> &nbsp;
+                    Days
                     <LoadingRefreshButton
                         loading={loading}
                         clickFunction={refreshData}

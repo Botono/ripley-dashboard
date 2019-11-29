@@ -8,6 +8,7 @@ import moment from 'moment';
 import { ExportToCsv } from 'export-to-csv';
 
 import Config from '../../common/config';
+import { hexToRgbA } from '../../common/utils';
 import { drawRectPlugin } from '../../common/chartPlugins';
 import LoadingRefreshButton from '../LoadingRefreshButton';
 
@@ -87,6 +88,8 @@ class WaterSummaryChart extends Component {
 
         }
 
+        console.log(Config.palette.blue[7]);
+
         let data = {
             labels: labels,
             datasets: [{
@@ -94,7 +97,8 @@ class WaterSummaryChart extends Component {
                 label: "Water Drank",
                 borderColor: Config.palette.blue[7],
                 fill: 'origin',
-                backgroundColor: Config.palette.blue[7],
+                backgroundColor: hexToRgbA(Config.palette.blue[7], 0.5),
+                fillOpacity: 0.1,
                 pointRadius: 3,
                 pointBackgroundColor: Config.palette.blue[5],
             },],
