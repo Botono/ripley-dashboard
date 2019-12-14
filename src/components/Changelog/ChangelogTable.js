@@ -81,7 +81,10 @@ class ChangelogTable extends Component {
                 rows.push(
                     <Card key={card_idx++}>
                         <Card.Header>
-                            {moment(current_date).format('MMMM D, YYYY')}
+                            {moment(current_date).format('MMMM D, YYYY')}&nbsp;
+                            <span className="small">
+                                ({moment(current_date).fromNow()})
+                            </span>
                         </Card.Header>
                         <Card.Body>
                             <ul className="fa-ul">
