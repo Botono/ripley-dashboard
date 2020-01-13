@@ -39,6 +39,8 @@ class MorningWalkComparisonChart extends Component {
         }
     }
 
+    // This is not needed anymore? I swear the FitBark API used to send inflated
+    // values that didn't match the app.
     getActivityValue = (raw_value) => {
         return Math.max(Math.round(raw_value / 5.5), 1)
     }
