@@ -39,10 +39,6 @@ class MorningWalkComparisonChart extends Component {
         }
     }
 
-    getWalkEntries = (data) => {
-
-    }
-
     getActivityValue = (raw_value) => {
         return Math.max(Math.round(raw_value / 5.5), 1)
     }
@@ -66,14 +62,14 @@ class MorningWalkComparisonChart extends Component {
                 tmp_activity = 0;
                 const idx = valid_indexes[i];
                 if (chart_data[key][idx]) {
-                    tmp_activity += this.getActivityValue(chart_data[key][idx].activity_value);
-                    console.log(`Index: ${idx}} Value: ${tmp_activity}`);
+                    tmp_activity += chart_data[key][idx].activity_value;
+                    console.log(`Key: ${key} Index: ${idx}} Parsed Value: ${tmp_activity} Raw Value: ${chart_data[key][idx].activity_value}`);
                 } else {
                     tmp_activity += 1;
                 }
 
                 if (tmp_activity >= 100) {
-                    activity_total += tmp_activity + this.getActivityValue(chart_data[key][idx + 1].activity_value);
+                    activity_total += tmp_activity + chart_data[key][idx + 1].activity_value;
                     break;
                 }
             }

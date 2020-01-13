@@ -45,6 +45,7 @@ class EveningWalkComparisonChart extends Component {
         let labels = [];
         let dataset_data = [];
         let activity_total;
+        let tmp_activity;
         let valid_indexes = [16, 17, 18];
         let colors = [];
         let moving_average_data;
@@ -53,13 +54,21 @@ class EveningWalkComparisonChart extends Component {
             labels.push(moment(key).format('MMM D'));
             activity_total = 0;
 
-            valid_indexes.forEach(idx => {
+            for (let i = 0; i < valid_indexes.length; i++) {
+                tmp_activity = 0;
+                const idx = valid_indexes[i];
                 if (chart_data[key][idx]) {
-                    activity_total += Math.max(Math.round(chart_data[key][idx].activity_value / 5.5), 1);
+                    tmp_activity += chart_data[key][idx].activity_value;
+                    console.log(`Key: ${key} Index: ${idx}} Parsed Value: ${tmp_activity} Raw Value: ${chart_data[key][idx].activity_value}`);
                 } else {
-                    activity_total += 1;
+                    tmp_activity += 1;
                 }
-            });
+
+                if (tmp_activity >= 100) {
+                    activity_total += tmp_activity + chart_data[key][idx + 1].activity_value;
+                    break;
+                }
+            }
 
             dataset_data.push(activity_total);
             colors.push(this.getBarColor(activity_total));
