@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { isEmpty, keys, takeRight } from 'lodash';
 import moment from 'moment';
 import Card from 'react-bootstrap/Card';
@@ -32,41 +32,55 @@ class SleepComparisonChart extends Component {
         }, this.formatData);
     }
 
+    getBarColor = (value) => {
+        if (value >= 4) {
+            return Config.palette['red'][6];
+        } else if (value > 3 && value < 4) {
+            return Config.palette['lime'][6];
+        } else if (value >= 2 && value < 3) {
+            return Config.palette['teal'][6];
+        } else {
+            return Config.palette['blue'][6];
+        }
+    }
+
+    getSleepDisruptionFactor = (data) => {
+        let totalSleepActivity = 0;
+        const threshold = 200;
+
+        for (let i = 0; i < data.length; i++) {
+            if (i < 8) {
+                totalSleepActivity += data[i].activity_value;
+            }
+        }
+        totalSleepActivity = totalSleepActivity > threshold ? totalSleepActivity - threshold : totalSleepActivity;
+        return totalSleepActivity / 100;
+    }
+
     formatData = () => {
         const { chart_data } = this.props;
         let data_keys = takeRight(keys(chart_data), this.state.days_to_show);
         let labels = [];
+        let colors = [];
         let dataset_data = [];
-        let datasets = [];
 
-        data_keys.forEach((key, date_idx) => { // '2019-02-01'
-            labels = [];
-            dataset_data = [];
-
-            chart_data[key].forEach((dataObj, idx) => {
-                if (idx < 8) { // Only midnight to 7AM
-                    labels.push(moment(`${key} ${dataObj.time}`).format('h A'));
-                    dataset_data.push(Math.max(Math.round(dataObj.activity_value / 5.5), 1));
-                }
-
-            });
-
-            datasets.push({
-                data: dataset_data,
-                label: moment(key).format('MMM D'),
-                borderColor: Config.bar_graph_colors[date_idx],
-                fill: false,
-                borderWidth: 1,
-                pointRadius: 0,
-                lineTension: 0,
-            })
+        data_keys.forEach((key, idx) => {
+            const sleepDisruptionFactor = this.getSleepDisruptionFactor(chart_data[key]);
+            console.log(`Date: ${key} Factor: ${sleepDisruptionFactor}`);
+            labels.push(moment(key).format('MMM D'));
+            dataset_data.push(sleepDisruptionFactor);
+            colors.push(this.getBarColor(sleepDisruptionFactor));
         });
-
 
         let data = {
             labels: labels,
-            datasets: datasets,
-        };
+            datasets: [{
+                data: dataset_data,
+                label: "Daily Activity",
+                borderColor: colors,
+                backgroundColor: colors,
+            },]
+        }
 
         this.setState({
             chart_data: data,
@@ -79,7 +93,7 @@ class SleepComparisonChart extends Component {
         return (
             <Card>
                 <Card.Header>
-                    Sleep Activity:  Last &nbsp;
+                    Sleep Disruption:  Last &nbsp;
                     <Form.Control type="number" step="1" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> &nbsp;
                     Days
                     <LoadingRefreshButton
@@ -89,27 +103,16 @@ class SleepComparisonChart extends Component {
                 </Card.Header>
                 <Card.Body>
                     <div className="chart-stage">
-                        <Line
+                        <Bar
                             data={this.state.chart_data}
                             options={{
+                                legend: false,
                                 scales: {
-
-                                    xAxes: [{
-                                        offset: 50,
-                                        ticks: { labelOffset: -50,},
-                                        gridLines: {
-                                            offsetGridLines: true
-                                        },
-                                    }],
                                     yAxes: [{
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Activity'
-                                        },
+                                        display: true,
                                         ticks: {
-                                            beginAtZero: true,   // minimum value will be 0.
-                                            suggestedMax: 200,
-                                        },
+                                            beginAtZero: true   // minimum value will be 0.
+                                        }
                                     }]
                                 }
                             }}
