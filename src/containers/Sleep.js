@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import { isNull } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import moment from 'moment';
 
-import SleepDisruptionFactorChart from '../components/Activity/SleepDisruptionFactorChart';
-import MorningWalkComparisonChart from '../components/Activity/MorningWalkComparisonChart';
+import SleepActivityTotalChart from '../components/Activity/SleepActivityTotalChart';
+import SleepActivityByDayChart from '../components/Activity/SleepActivityByDayChart';
 
 import { fetchData, isApiKeyMissing } from '../common/utils'
 
 
-class Activiy extends Component {
+class Water extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             redirect_to_login: false,
-            hourly_data: {},
-            daily_data: {},
+            activity_data_hourly: {},
+            activity_hourly_loading: true,
         };
     }
 
     componentDidMount() {
+        document.title = 'Dashboard: Water';
         this.initializeData();
     }
 
@@ -35,41 +34,49 @@ class Activiy extends Component {
 
     initializeData = () => {
         if (!this.apiKeyMissing()) {
-            this.getHourlyData();
-            // this.getDailyData();
+            this.getHourlyActivity();
         }
     }
 
-    getHourlyData = () => {
+    getHourlyActivity = () => {
         let that = this,
             params = {
                 numberOfDays: 30,
                 resolution: 'hourly',
             };
 
+        this.setState({
+            activity_hourly_loading: true,
+        });
+
         fetchData('/fitbark/activity', 'GET', params)
             .then(function (json_data) {
                 that.setState({
-                    hourly_data: json_data,
+                    activity_data_hourly: json_data,
+                    activity_hourly_loading: false,
                 });
             });
     }
 
-    getDailyData = () => {
+    getDailyActivity = () => {
         let that = this,
             params = {
                 numberOfDays: 30,
                 resolution: 'daily',
             };
 
+        this.setState({
+            activity_daily_loading: true,
+        });
+
         fetchData('/fitbark/activity', 'GET', params)
             .then(function (json_data) {
                 that.setState({
-                    daily_data: json_data,
+                    activity_data_daily: json_data,
+                    activity_daily_loading: false,
                 });
             });
     }
-
 
     render() {
         if (this.state.redirect_to_login) {
@@ -77,13 +84,21 @@ class Activiy extends Component {
         }
 
         return (
-            <Container fluid className="rootContainer">
+            <Container fluid className="rootContainer big-chart">
                 <Row>
-                    <Col sm={6}>
-                        <SleepDisruptionFactorChart chart_data={this.state.hourly_data} />
+                    <Col>
+                        <SleepActivityTotalChart
+                            chart_data={this.state.activity_data_hourly}
+                            loading={this.state.activity_hourly_loading}
+                            refreshData={this.getHourlyActivity}
+                        />
                     </Col>
-                    <Col sm={6}>
-                        <MorningWalkComparisonChart chart_data={this.state.hourly_data} />
+                    <Col>
+                        <SleepActivityByDayChart
+                            chart_data={this.state.activity_data_hourly}
+                            loading={this.state.activity_hourly_loading}
+                            refreshData={this.getHourlyActivity}
+                        />
                     </Col>
                 </Row>
             </Container>
@@ -91,4 +106,4 @@ class Activiy extends Component {
     }
 }
 
-export default Activiy;
+export default Water;

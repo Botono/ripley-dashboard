@@ -19,6 +19,9 @@ class Navigation extends Component {
                 <Nav.Item>
                     <NavLink to="/water" activeClassName='is-active'>Water</NavLink>
                 </Nav.Item>
+                <Nav.Item>
+                    <NavLink to="/sleep" activeClassName='is-active'>Sleep</NavLink>
+                </Nav.Item>
             </Navbar>
         );
     }

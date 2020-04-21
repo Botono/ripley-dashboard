@@ -7,7 +7,8 @@ import moment from 'moment';
 import ChangelogTable from '../components/Changelog/ChangelogTable'
 import WaterSummaryChart from '../components/Water/WaterSummaryChart';
 import ActivitySummaryChart from '../components/Activity/ActivitySummaryChart';
-import SleepComparisonChart from '../components/Activity/SleepComparisonChart';
+import SleepActivityByDayChart from '../components/Activity/SleepActivityByDayChart';
+import SleepActivityTotalChart from '../components/Activity/SleepActivityTotalChart';
 import MorningWalkComparisonChart from '../components/Activity/MorningWalkComparisonChart';
 import EveningWalkComparisonChart from '../components/Activity/EveningWalkComparisonChart';
 import BloodworkComparisonChart from '../components/Bloodwork/BloodworkComparisonChart';
@@ -204,7 +205,7 @@ class Overview extends Component {
                         </Row>
                         <Row>
                             <Col sm={6}>
-                                <SleepComparisonChart
+                                <SleepActivityTotalChart
                                     chart_data={this.state.activity_data_hourly}
                                     loading={this.state.activity_hourly_loading}
                                     refreshData={this.getHourlyActivity}
@@ -216,6 +217,15 @@ class Overview extends Component {
                                     bloodwork_labels={this.state.bloodwork_labels}
                                     loading={this.state.bloodwork_loading}
                                     refreshData={this.getBloodworkData}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={6}>
+                                <SleepActivityByDayChart
+                                    chart_data={this.state.activity_data_hourly}
+                                    loading={this.state.activity_hourly_loading}
+                                    refreshData={this.getHourlyActivity}
                                 />
                             </Col>
                         </Row>

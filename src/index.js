@@ -8,6 +8,7 @@ import Overview from './containers/Overview';
 import Activity from './containers/Activity';
 import Logs from './containers/Logs';
 import Water from './containers/Water';
+import Sleep from './containers/Sleep';
 import Navigation from './components/Nav/Navigation';
 import * as serviceWorker from './serviceWorker';
 
@@ -21,6 +22,7 @@ class App extends Component {
                     <Route path="/activity" component={Activity} />
                     <Route path="/logs" component={Logs} />
                     <Route path="/water" component={Water} />
+                    <Route path="/sleep" component={Sleep} />
 
                     <Route path="/login" component={Login} />
                 </div>

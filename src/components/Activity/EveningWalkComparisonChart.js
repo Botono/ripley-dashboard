@@ -67,7 +67,7 @@ class EveningWalkComparisonChart extends Component {
                 if (tmp_activity >= 200) {
                     activity_total += tmp_activity;
                     // In case the walk spilled over into the next hour, include it if the value is large enough
-                    if (chart_data[key][idx + 1].activity_value >= 100) {
+                    if (chart_data[key][idx + 1] && chart_data[key][idx + 1].activity_value >= 100) {
                         activity_total += chart_data[key][idx + 1].activity_value;
                     }
                     break;

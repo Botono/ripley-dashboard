@@ -9,7 +9,7 @@ import Config from '../../common/config';
 import LoadingRefreshButton from '../LoadingRefreshButton';
 
 
-class SleepComparisonChart extends Component {
+export default class SleepActivityTotalChart extends Component {
 
     constructor(props) {
         super(props);
@@ -33,28 +33,27 @@ class SleepComparisonChart extends Component {
     }
 
     getBarColor = (value) => {
-        if (value >= 4) {
+        if (value >= 400) {
             return Config.palette['red'][6];
-        } else if (value > 3 && value < 4) {
+        } else if (value > 300 && value < 4) {
             return Config.palette['lime'][6];
-        } else if (value >= 2 && value < 3) {
+        } else if (value >= 200 && value < 3) {
             return Config.palette['teal'][6];
         } else {
             return Config.palette['blue'][6];
         }
     }
 
-    getSleepDisruptionFactor = (data) => {
+    getTotalSleepActivity = (data) => {
         let totalSleepActivity = 0;
-        const threshold = 200;
 
         for (let i = 0; i < data.length; i++) {
             if (i < 8) {
                 totalSleepActivity += data[i].activity_value;
             }
         }
-        totalSleepActivity = totalSleepActivity > threshold ? totalSleepActivity - threshold : totalSleepActivity;
-        return totalSleepActivity / 100;
+
+        return totalSleepActivity;
     }
 
     formatData = () => {
@@ -65,18 +64,17 @@ class SleepComparisonChart extends Component {
         let dataset_data = [];
 
         data_keys.forEach((key, idx) => {
-            const sleepDisruptionFactor = this.getSleepDisruptionFactor(chart_data[key]);
-            console.log(`Date: ${key} Factor: ${sleepDisruptionFactor}`);
+            const totalSleepActivity = this.getTotalSleepActivity(chart_data[key]);
             labels.push(moment(key).format('MMM D'));
-            dataset_data.push(sleepDisruptionFactor);
-            colors.push(this.getBarColor(sleepDisruptionFactor));
+            dataset_data.push(totalSleepActivity);
+            colors.push(this.getBarColor(totalSleepActivity));
         });
 
         let data = {
             labels: labels,
             datasets: [{
                 data: dataset_data,
-                label: "Daily Activity",
+                label: "Sleep Activity",
                 borderColor: colors,
                 backgroundColor: colors,
             },]
@@ -93,7 +91,7 @@ class SleepComparisonChart extends Component {
         return (
             <Card>
                 <Card.Header>
-                    Sleep Disruption:  Last &nbsp;
+                    Sleep Activity Totals:  Last &nbsp;
                     <Form.Control type="number" step="1" size="sm" className="input-inline small" value={this.state.days_to_show} onChange={this.changeChartNumber} /> &nbsp;
                     Days
                     <LoadingRefreshButton
@@ -123,5 +121,3 @@ class SleepComparisonChart extends Component {
         );
     }
 }
-
-export default SleepComparisonChart;
