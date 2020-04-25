@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Bar, Chart } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
@@ -27,7 +28,7 @@ class BloodworkComparisonChart extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (isEmpty(prevProps) || keys(prevProps.chart_data).length !== keys(this.props.chart_data).length) {
+        if (isEmpty(prevProps) || keys(prevProps.chart_data).length !== keys(this.props.chart_data).length || keys(prevProps.bloodwork_labels).length !== keys(this.props.bloodwork_labels).length) {
             this.formatChartData();
         }
     }
@@ -106,13 +107,16 @@ class BloodworkComparisonChart extends Component {
     }
 
     getBloodworkOptions = () => {
-        return this.props.bloodwork_labels.map((label_obj, idx) => {
+        const { bloodwork_labels } = this.props;
+        return bloodwork_labels.map((label_obj, idx) => {
             return (<option key={idx}>{label_obj.name}</option>)
         });
     }
 
     render() {
         const { loading, refreshData } = this.props;
+
+        const bloodworkOptions = this.getBloodworkOptions();
 
         let chart_options = {
             legend: false,
@@ -140,7 +144,7 @@ class BloodworkComparisonChart extends Component {
                         as="select"
                         className="input-inline"
                         onChange={this.changeChartedItem}>
-                        {this.getBloodworkOptions()}
+                        {bloodworkOptions}
                     </Form.Control>
                     <LoadingRefreshButton
                         loading={loading}
@@ -160,5 +164,18 @@ class BloodworkComparisonChart extends Component {
         );
     }
 }
+
+BloodworkComparisonChart.propTypes = {
+    bloodwork_labels: PropTypes.array.isRequired,
+    chart_data: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    refreshData: PropTypes.func,
+};
+
+BloodworkComparisonChart.defaultProps = {
+    bloodwork_labels: [],
+    chart_data: {},
+    loading: true,
+};
 
 export default BloodworkComparisonChart;

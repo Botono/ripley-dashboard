@@ -5,10 +5,10 @@ import { Container, Row, Col } from 'react-bootstrap';
 import SleepActivityTotalChart from '../components/Activity/SleepActivityTotalChart';
 import SleepActivityByDayChart from '../components/Activity/SleepActivityByDayChart';
 
-import { fetchData, isApiKeyMissing } from '../common/utils'
+import { isApiKeyMissing, getData } from '../common/utils'
 
 
-class Water extends Component {
+class Sleep extends Component {
 
     constructor(props) {
         super(props);
@@ -39,43 +39,25 @@ class Water extends Component {
     }
 
     getHourlyActivity = () => {
-        let that = this,
-            params = {
-                numberOfDays: 30,
-                resolution: 'hourly',
-            };
-
         this.setState({
             activity_hourly_loading: true,
-        });
-
-        fetchData('/fitbark/activity', 'GET', params)
-            .then(function (json_data) {
-                that.setState({
-                    activity_data_hourly: json_data,
-                    activity_hourly_loading: false,
-                });
+        }, () => {
+            this.setState({
+                activity_data_hourly: getData('activity_hourly'),
+                activity_hourly_loading: false,
             });
+        });
     }
 
     getDailyActivity = () => {
-        let that = this,
-            params = {
-                numberOfDays: 30,
-                resolution: 'daily',
-            };
-
         this.setState({
             activity_daily_loading: true,
-        });
-
-        fetchData('/fitbark/activity', 'GET', params)
-            .then(function (json_data) {
-                that.setState({
-                    activity_data_daily: json_data,
-                    activity_daily_loading: false,
-                });
+        }, () => {
+            this.setState({
+                activity_data_daily: getData('activity_daily'),
+                activity_daily_loading: false,
             });
+        });
     }
 
     render() {
@@ -106,4 +88,4 @@ class Water extends Component {
     }
 }
 
-export default Water;
+export default Sleep;

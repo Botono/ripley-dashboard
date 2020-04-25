@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import WaterSummaryChart from '../components/Water/WaterSummaryChart';
 
-import { fetchData, isApiKeyMissing } from '../common/utils'
+import { getData, isApiKeyMissing } from '../common/utils'
 
 
 class Water extends Component {
@@ -38,17 +38,14 @@ class Water extends Component {
     }
 
     getWaterData = () => {
-        let that = this;
         this.setState({
             water_data_loading: true,
-        });
-        fetchData('/water')
-            .then(function (json_data) {
-                that.setState({
-                    water_data: json_data,
-                    water_data_loading: false,
-                });
+        }, () => {
+            this.setState({
+                water_data: getData('water'),
+                water_data_loading: false,
             });
+        });
     }
 
     render() {

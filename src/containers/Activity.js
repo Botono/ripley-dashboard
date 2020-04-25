@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { isNull } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import moment from 'moment';
 
 import SleepDisruptionFactorChart from '../components/Activity/SleepDisruptionFactorChart';
 import MorningWalkComparisonChart from '../components/Activity/MorningWalkComparisonChart';
 
-import { fetchData, isApiKeyMissing } from '../common/utils'
+import { getData, isApiKeyMissing } from '../common/utils'
 
 
 class Activiy extends Component {
@@ -17,7 +15,6 @@ class Activiy extends Component {
         this.state = {
             redirect_to_login: false,
             hourly_data: {},
-            daily_data: {},
         };
     }
 
@@ -35,39 +32,31 @@ class Activiy extends Component {
 
     initializeData = () => {
         if (!this.apiKeyMissing()) {
-            this.getHourlyData();
-            // this.getDailyData();
+            this.getHourlyActivity();
+            // this.getDailyActivity();
         }
     }
 
-    getHourlyData = () => {
-        let that = this,
-            params = {
-                numberOfDays: 30,
-                resolution: 'hourly',
-            };
-
-        fetchData('/fitbark/activity', 'GET', params)
-            .then(function (json_data) {
-                that.setState({
-                    hourly_data: json_data,
-                });
+    getHourlyActivity = () => {
+        this.setState({
+            activity_hourly_loading: true,
+        }, () => {
+            this.setState({
+                activity_data_hourly: getData('activity_hourly'),
+                activity_hourly_loading: false,
             });
+        });
     }
 
-    getDailyData = () => {
-        let that = this,
-            params = {
-                numberOfDays: 30,
-                resolution: 'daily',
-            };
-
-        fetchData('/fitbark/activity', 'GET', params)
-            .then(function (json_data) {
-                that.setState({
-                    daily_data: json_data,
-                });
+    getDailyActivity = () => {
+        this.setState({
+            activity_daily_loading: true,
+        }, () => {
+            this.setState({
+                activity_data_daily: getData('activity_daily'),
+                activity_daily_loading: false,
             });
+        });
     }
 
 
@@ -83,7 +72,11 @@ class Activiy extends Component {
                         <SleepDisruptionFactorChart chart_data={this.state.hourly_data} />
                     </Col>
                     <Col sm={6}>
-                        <MorningWalkComparisonChart chart_data={this.state.hourly_data} />
+                        <MorningWalkComparisonChart
+                            chart_data={this.state.activity_data_hourly}
+                            loading={this.state.activity_hourly_loading}
+                            refreshData={this.getHourlyActivity}
+                        />
                     </Col>
                 </Row>
             </Container>
