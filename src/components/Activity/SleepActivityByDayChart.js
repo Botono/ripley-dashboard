@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { isEmpty, keys } from 'lodash';
+import { isEmpty, keys, takeRight } from 'lodash';
+import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 

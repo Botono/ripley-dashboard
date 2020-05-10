@@ -3,7 +3,7 @@ import { Line, Chart } from 'react-chartjs-2';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { isEmpty, keys, isUndefined } from 'lodash';
+import { isEmpty, keys, takeRight, isUndefined } from 'lodash';
 import moment from 'moment';
 import { ExportToCsv } from 'export-to-csv';
 
@@ -87,6 +87,8 @@ class WaterSummaryChart extends Component {
             }
 
         }
+
+        console.log(Config.palette.blue[7]);
 
         let data = {
             labels: labels,

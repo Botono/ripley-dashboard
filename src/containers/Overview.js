@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { isNull } from 'lodash';
 import { Container, Row, Col } from 'react-bootstrap';
+import moment from 'moment';
 
 import ChangelogTable from '../components/Changelog/ChangelogTable'
 import WaterSummaryChart from '../components/Water/WaterSummaryChart';
@@ -11,7 +13,7 @@ import MorningWalkComparisonChart from '../components/Activity/MorningWalkCompar
 import EveningWalkComparisonChart from '../components/Activity/EveningWalkComparisonChart';
 import BloodworkComparisonChart from '../components/Bloodwork/BloodworkComparisonChart';
 
-import { isApiKeyMissing, getData } from '../common/utils'
+import { fetchData, isApiKeyMissing } from '../common/utils'
 
 
 class Overview extends Component {
@@ -64,70 +66,99 @@ class Overview extends Component {
     }
 
     getWaterData = () => {
+        let that = this;
         this.setState({
             water_data_loading: true,
-        }, () => {
-            const waterData = getData('water');
-            this.setState({
-                water_data: waterData,
-                water_data_loading: false,
-            });
         });
+        fetchData('/water')
+            .then(function (json_data) {
+                that.setState({
+                    water_data: json_data,
+                    water_data_loading: false,
+                });
+            });
     }
 
     getHourlyActivity = () => {
+        let that = this,
+            params = {
+                numberOfDays: 30,
+                resolution: 'hourly',
+            };
+
         this.setState({
             activity_hourly_loading: true,
-        }, () => {
-            const hourlyData = getData('activity_hourly');
-            this.setState({
-                activity_data_hourly: hourlyData,
-                activity_hourly_loading: false,
-            });
         });
+
+        fetchData('/fitbark/activity', 'GET', params)
+            .then(function (json_data) {
+                that.setState({
+                    activity_data_hourly: json_data,
+                    activity_hourly_loading: false,
+                });
+            });
     }
 
     getDailyActivity = () => {
+        let that = this,
+            params = {
+                numberOfDays: 30,
+                resolution: 'daily',
+            };
+
         this.setState({
             activity_daily_loading: true,
-        }, () => {
-            const dailyData = getData('activity_daily')
-            this.setState({
-                activity_data_daily: dailyData,
-                activity_daily_loading: false,
-            });
         });
+
+        fetchData('/fitbark/activity', 'GET', params)
+            .then(function (json_data) {
+                that.setState({
+                    activity_data_daily: json_data,
+                    activity_daily_loading: false,
+                });
+            });
     }
 
     getChangelogData = () => {
+        let that = this;
+
         this.setState({
             changelog_loading: true,
-        }, () => {
-            const changelogData = getData('changelog')
-            this.setState({
-                changelog_data: changelogData,
-                changelog_loading: false,
-            });
         });
+
+        fetchData('/changelog')
+            .then(function (json_data) {
+                that.setState({
+                    changelog_data: json_data,
+                    changelog_loading: false,
+                });
+            });
     }
 
     getBloodworkData = () => {
+        let that = this;
+
         this.setState({
             bloodwork_loading: true,
-        }, () => {
-            const bloodworkData = getData('bloodwork');
-            this.setState({
-                bloodwork_data: bloodworkData,
-                bloodwork_loading: false,
-            });
         });
+
+        fetchData('/bloodwork')
+            .then(function (json_data) {
+                that.setState({
+                    bloodwork_data: json_data,
+                    bloodwork_loading: false,
+                });
+            });
     }
 
     getBloodworkLabels = () => {
-        const labelData = getData('bloodwork_labels')
-        this.setState({
-            bloodwork_labels: labelData,
-        });
+        let that = this;
+        fetchData('/bloodwork/labels')
+            .then(function (json_data) {
+                that.setState({
+                    bloodwork_labels: json_data,
+                });
+            });
     }
 
     render() {

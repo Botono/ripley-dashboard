@@ -5,10 +5,10 @@ import { Container, Row, Col } from 'react-bootstrap';
 import SleepActivityTotalChart from '../components/Activity/SleepActivityTotalChart';
 import SleepActivityByDayChart from '../components/Activity/SleepActivityByDayChart';
 
-import { isApiKeyMissing, getData } from '../common/utils'
+import { fetchData, isApiKeyMissing } from '../common/utils'
 
 
-class Sleep extends Component {
+class Water extends Component {
 
     constructor(props) {
         super(props);
@@ -39,25 +39,43 @@ class Sleep extends Component {
     }
 
     getHourlyActivity = () => {
+        let that = this,
+            params = {
+                numberOfDays: 30,
+                resolution: 'hourly',
+            };
+
         this.setState({
             activity_hourly_loading: true,
-        }, () => {
-            this.setState({
-                activity_data_hourly: getData('activity_hourly'),
-                activity_hourly_loading: false,
-            });
         });
+
+        fetchData('/fitbark/activity', 'GET', params)
+            .then(function (json_data) {
+                that.setState({
+                    activity_data_hourly: json_data,
+                    activity_hourly_loading: false,
+                });
+            });
     }
 
     getDailyActivity = () => {
+        let that = this,
+            params = {
+                numberOfDays: 30,
+                resolution: 'daily',
+            };
+
         this.setState({
             activity_daily_loading: true,
-        }, () => {
-            this.setState({
-                activity_data_daily: getData('activity_daily'),
-                activity_daily_loading: false,
-            });
         });
+
+        fetchData('/fitbark/activity', 'GET', params)
+            .then(function (json_data) {
+                that.setState({
+                    activity_data_daily: json_data,
+                    activity_daily_loading: false,
+                });
+            });
     }
 
     render() {
@@ -88,4 +106,4 @@ class Sleep extends Component {
     }
 }
 
-export default Sleep;
+export default Water;

@@ -66,6 +66,7 @@ export default class SleepDisruptionFactorChart extends Component {
 
         data_keys.forEach((key, idx) => {
             const sleepDisruptionFactor = this.getSleepDisruptionFactor(chart_data[key]);
+            console.log(`Date: ${key} Factor: ${sleepDisruptionFactor}`);
             labels.push(moment(key).format('MMM D'));
             dataset_data.push(sleepDisruptionFactor);
             colors.push(this.getBarColor(sleepDisruptionFactor));

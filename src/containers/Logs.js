@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import ChangelogTable from '../components/Changelog/ChangelogTable';
 
-import { getData, isApiKeyMissing } from '../common/utils'
+import { fetchData, isApiKeyMissing } from '../common/utils'
 
 
 class Logs extends Component {
@@ -39,14 +39,19 @@ class Logs extends Component {
     }
 
     getChangelogData = () => {
+        let that = this;
+
         this.setState({
             changelog_loading: true,
-        }, () => {
-            this.setState({
-                changelog_data: getData('changelog'),
-                changelog_loading: false,
-            });
         });
+
+        fetchData('/changelog')
+            .then(function (json_data) {
+                that.setState({
+                    changelog_data: json_data,
+                    changelog_loading: false,
+                });
+            });
     }
 
     render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { isEmpty, keys, takeRight } from 'lodash';
+import { Line, Bar } from 'react-chartjs-2';
+import { isEmpty, keys, takeRight, includes } from 'lodash';
 import moment from 'moment';
 import sma from 'sma';
 import Card from 'react-bootstrap/Card';
@@ -59,7 +59,7 @@ class EveningWalkComparisonChart extends Component {
                 const idx = valid_indexes[i];
                 if (chart_data[key][idx]) {
                     tmp_activity += chart_data[key][idx].activity_value;
-                    // console.log(`Key: ${key} Index: ${idx}} Parsed Value: ${tmp_activity} Raw Value: ${chart_data[key][idx].activity_value}`);
+                    console.log(`Key: ${key} Index: ${idx}} Parsed Value: ${tmp_activity} Raw Value: ${chart_data[key][idx].activity_value}`);
                 } else {
                     tmp_activity += 1;
                 }

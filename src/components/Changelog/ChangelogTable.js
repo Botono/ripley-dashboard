@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
-import { isEmpty } from 'lodash';
+import { isEmpty, keys, takeRight } from 'lodash';
 import moment from 'moment';
 
 import Card from 'react-bootstrap/Card';
@@ -60,7 +59,6 @@ class ChangelogTable extends Component {
     }
 
     getTableRows = () => {
-        const { filtered_data } = this.state;
         const msgTypeIconMap = {
             Diet: 'utensils',
             Medicine: 'prescription',
@@ -72,7 +70,7 @@ class ChangelogTable extends Component {
         let card_idx = 0;
         let grouped_messages = [];
 
-        filtered_data.forEach((row, idx) => {
+        this.state.filtered_data.forEach((row, idx) => {
             let classes = `fa-li fa fa-${msgTypeIconMap[row.type]}`;
 
             if (isNull(current_date)) {
@@ -159,16 +157,5 @@ class ChangelogTable extends Component {
         );
     }
 }
-
-ChangelogTable.propTypes = {
-    chart_data: PropTypes.object.isRequired,
-    loading: PropTypes.bool.isRequired,
-    refreshData: PropTypes.func,
-};
-
-ChangelogTable.defaultProps = {
-    chart_data: [],
-    loading: true,
-};
 
 export default ChangelogTable;
