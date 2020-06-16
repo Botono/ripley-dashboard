@@ -81,7 +81,7 @@ export default class SleepActivityByDayChart extends Component {
         let colors = [];
 
         for (let i = 0; i < hourlyData.length; i++) {
-            if (i < 8) {
+            if (i < 7) {
                 labels.push(this.getHourLabel(i));
                 dataset_data.push(hourlyData[i].activity_value);
                 colors.push(this.getBarColor(hourlyData[i].activity_value));

@@ -48,7 +48,7 @@ export default class SleepActivityTotalChart extends Component {
         let totalSleepActivity = 0;
 
         for (let i = 0; i < data.length; i++) {
-            if (i < 8) {
+            if (i < 7) {
                 totalSleepActivity += data[i].activity_value;
             }
         }

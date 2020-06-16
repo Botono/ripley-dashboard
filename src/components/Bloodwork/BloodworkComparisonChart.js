@@ -106,7 +106,10 @@ class BloodworkComparisonChart extends Component {
     }
 
     getBloodworkOptions = () => {
-        return this.props.bloodwork_labels.map((label_obj, idx) => {
+        const { bloodwork_labels} = this.props;
+        const labels = bloodwork_labels || [];
+
+        return labels.map((label_obj, idx) => {
             return (<option key={idx}>{label_obj.name}</option>)
         });
     }
