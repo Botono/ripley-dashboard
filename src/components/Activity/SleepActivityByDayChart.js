@@ -153,6 +153,7 @@ export default class SleepActivityByDayChart extends Component {
                                     yAxes: [{
                                         display: true,
                                         ticks: {
+                                            suggestedMax: 500,
                                             beginAtZero: true   // minimum value will be 0.
                                         }
                                     }]
